@@ -99,8 +99,8 @@ void learn()
 	int future_s; //Ligne correspondant à l'état futur
 	double max_future_s; // Calcul de max(Q(s', a))
 	envOutput state;
-	double g = 0.1;
-	alpha = 0.01;
+	double g = 0.9;
+	alpha = 0.5;
 
 	double max_occurence = 10000;
 

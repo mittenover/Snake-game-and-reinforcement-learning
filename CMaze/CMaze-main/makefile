@@ -1,6 +1,6 @@
 CC=gcc
 CFLAGS=-Wall -Werror -Wfatal-errors
-SRC=~/ENSTA/in104/CMaze/CMaze-main/
+SRC=./
 EXEC=main
 
 all: $(EXEC)
