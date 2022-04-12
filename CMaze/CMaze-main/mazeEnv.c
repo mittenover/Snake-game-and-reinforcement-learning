@@ -81,7 +81,7 @@ void delete_crumb(){
         for (i = 0; i < rows; ++i) {
                 for (j = 0; j < cols; ++j) {
                         if (visited[i][j] == crumb) {
-                                visited[i][j] = crumb;
+                                visited[i][j] = unknown;
                         }
                 }
         }
@@ -92,6 +92,18 @@ void maze_reset(){
      state_row = start_row;
      state_col = start_col;
      delete_crumb();
+     delete_point();
+}
+
+void delete_point(){
+    int i, j;
+        for (i = 0; i < rows; ++i) {
+                for (j = 0; j < cols; ++j) {
+                        if (maze[i][j] == '.') {
+                                maze[i][j] = ' ';
+                        }
+                }
+        }
 }
 
 envOutput maze_step(action a){
@@ -100,7 +112,8 @@ envOutput maze_step(action a){
     envOutput stepOut;
 
     // On introduit des variables locales, qui permettront de mieux réagir face aux murs
-    int nouv_row, nouv_col = state_row, state_col;
+    int nouv_row = state_row;
+    int nouv_col = state_col;
 
     // Pour chaque situation, on doit prendre en compte les bordes et les murs, et appliquer des récompenses négatives
 
@@ -114,11 +127,11 @@ envOutput maze_step(action a){
         break;
 
         case right:
-            nouv_col = min(cols,state_col -1);
+            nouv_col = min(cols,state_col +1);
         break;
 
         case left:
-            nouv_col = max(0,state_col +1);
+            nouv_col = max(0,state_col -1);
         break;
 
         default:
@@ -133,6 +146,7 @@ envOutput maze_step(action a){
             stepOut.reward = 0.01;
             stepOut.new_row = nouv_row;
             stepOut.new_col = nouv_col;
+            visited[nouv_row][nouv_col] = crumb;
         break;
         case wall:
             // Si c'est un mur, on avance pas et la recompense est négative

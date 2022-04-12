@@ -67,6 +67,7 @@ double max_future_state(int s)
 	{
 		if (table_reward[s][i] > max)
 		{
+
 			max = table_reward[s][i];
 		}
 	}
@@ -89,7 +90,26 @@ int action_to_int(action a)
 // La fonction env_action_sample fait déjà le travail
 // Pour dfs2
 action next_move(){
-    return env_action_sample2();
+    int s = state_row*cols + state_col;
+    double max = table_reward[s][0];
+    action result = up;
+
+    if (table_reward[s][1] > max)
+    {
+    	max = table_reward[s][1];
+    	result = down;
+    }
+    if (table_reward[s][2] > max)
+    {
+    	max = table_reward[s][2];
+    	result = right;
+    }
+    if (table_reward[s][3] > max)
+    {
+    	max = table_reward[s][3];
+    	result = left;
+    }
+    return  result;
 }
 
 
@@ -105,7 +125,7 @@ int dfs2(){
     delete_crumb(); //On enlève les crumbs éventuels
 
     // while ((state_row =! goal_row) || (state_col != goal_col))
-    for (int i = 0; i < 10; ++i) // On teste pour 10 répététions
+    for (int i = 0; i < 100; ++i) // On teste pour 10 répététions
     {
         next = maze_step(next_move());
         state_row = next.new_row;
@@ -123,6 +143,10 @@ void add_crumbs(){
           for (int j=0; j<cols; j++){
               if (visited[i][j] ==crumb){
                   maze[i][j] ='.';
+              }
+              if (i == goal_row && j == goal_col) // Erreur sinon
+              {
+              	maze[i][j] = 'g';
               }
           }
      }
@@ -158,11 +182,6 @@ void one_learning(){
 
 			state = maze_step(a);
 
-			// Affichage de l'état actuel dans le labyrinthe
-
-			// visited[state_row][state_col] = crumb;
-			// maze_render();
-
 			// Effectue l'action et en déduit une récompense, et la valeur de l'état futur :
 			r = state.reward;
 			future_s = state.new_row*cols + state.new_col;
@@ -170,7 +189,9 @@ void one_learning(){
 			max_future_s = max_future_state(future_s);
 
 			table_reward[s][a_nb] = table_reward[s][a_nb] + alpha *(r + g * max_future_s - table_reward[s][a_nb]);
-		
+
+			state_row = state.new_row;
+			state_col = state.new_col;
 			s = future_s;
 			// visited[state_row][start_col] = unknown;
 		}
@@ -205,8 +226,6 @@ void learn()
 
 	while(strcmp(entree, "\n") == 0 || strcmp(entree, "r\n") == 0)
 	{
-		maze_reset();
-
 		// On fait une boucle d'apprentissage
 		one_learning();
 		number_learning++;
@@ -214,6 +233,7 @@ void learn()
 
 
 		// On trouve le chemin :
+		maze_reset();
     	dfs2(start_row,start_col);
     	add_crumbs();
 
@@ -233,6 +253,8 @@ void learn()
 		// Ne fonctionne pas pour le moment
 		if (strcmp(entree, "r\n") == 0)
 		{
+			// delete_point();
+			// maze_render();
 			fill_tableau();
 			number_learning = 0;
 		}

@@ -64,4 +64,6 @@ void init_visited();
 
 void delete_crumb();
 
+void delete_point();
+
 #endif /* MAZEENV_H */
