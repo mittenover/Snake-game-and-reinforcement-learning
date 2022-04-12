@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-Wall -Werror -Wfatal-errors
+CFLAGS= #-Wall -Werror -Wfatal-errors
 SRC=./
 EXEC=main
 

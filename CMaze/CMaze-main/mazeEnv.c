@@ -92,65 +92,69 @@ void maze_reset(){
      state_row = start_row;
      state_col = start_col;
      delete_crumb();
-
-     // On enlève les points tracés par les dfs précédents
-     int i, j;
-        for (i = 0; i < rows; ++i) {
-                for (j = 0; j < cols; ++j) {
-                        if (maze[i][j] == '.') {
-                                maze[i][j] = ' ';
-                        }
-                }
-        }
-
 }
 
 envOutput maze_step(action a){
-    int reward = 0;
-    int wall_reward = -1;
-    int done = 0;
+    // int reward = 0;
+    // int done = 0;
     envOutput stepOut;
+
+    // On introduit des variables locales, qui permettront de mieux réagir face aux murs
+    int nouv_row, nouv_col = state_row, state_col;
 
     // Pour chaque situation, on doit prendre en compte les bordes et les murs, et appliquer des récompenses négatives
 
+    switch (a){
+        case up:
+            nouv_row = max(0,state_row -1);
+        break;
 
-    if (a==up){
-       if (max(0,state_row -1) == 0) {stepOut.reward = wall_reward;}
-       else if (visited[state_row -1][state_col] == wall) {stepOut.reward = wall_reward;}
-       else {state_row = state_row -1;}
+        case down:
+            nouv_row = min(rows,state_row +1);
+        break;
+
+        case right:
+            nouv_col = min(cols,state_col -1);
+        break;
+
+        case left:
+            nouv_col = max(0,state_col +1);
+        break;
+
+        default:
+        break;
     }
 
-    else if (a==down){
-       if (min(rows,state_row +1) == rows) {stepOut.reward = wall_reward ;}
-       else if (visited[state_row +1][state_col] == wall) {stepOut.reward = wall_reward;}
-       else {state_row = state_row +1;}
-    }
+    // On vérifie chaque terrain d'état futur, et on ajuste les valeur de stepOut
 
-    else if (a==right){
-       if (min(cols,state_col -1) == cols) {stepOut.reward = wall_reward ;}
-       else if (visited[state_row][state_col -1] == wall) {stepOut.reward = wall_reward;}
-       else {state_col= state_col -1;}
+    switch (visited[nouv_row][nouv_col]){
+        case unknown:
+            // Si la case est inconnue, elle devient crumb (rencontrée), et la récompense est positive. Le sujet bouge
+            stepOut.reward = 0.01;
+            stepOut.new_row = nouv_row;
+            stepOut.new_col = nouv_col;
+        break;
+        case wall:
+            // Si c'est un mur, on avance pas et la recompense est négative
+            stepOut.reward = -1;
+            stepOut.new_row = state_row;
+            stepOut.new_col = state_col;
+        break;
+        case crumb:
+            // Si déjà rencontrée, on avance mais on applique une récompense négative
+            stepOut.reward = -0.01;
+            stepOut.new_row = nouv_row;
+            stepOut.new_col = nouv_col;
+        break;
+        case goal:
+            // Si c'est l'objectif on se place dessus et on done une bonne récompense
+            stepOut.reward = 1;
+            stepOut.new_row = nouv_row;
+            stepOut.new_col = nouv_col;
+        break;
+        default:
+        break;
     }
-
-    else if (a==left){
-       if (max(0,state_col +1) == 0) {stepOut.reward = wall_reward ;}
-       else if (visited[state_row][state_col +1] == wall) {stepOut.reward = wall_reward;}
-       else {state_col= state_col +1;}
-    }
-
-    else{
-        stepOut.reward = reward;
-    }
-    
-    if((state_row == goal_row) && (state_col == goal_col)){
-       reward = 1;
-       done   = 1;
-    }
-
-    // stepOut.reward = reward;
-    stepOut.done   = done;
-    stepOut.new_col = state_col;
-    stepOut.new_row = state_row; 
 
    return stepOut;
 }
