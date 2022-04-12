@@ -76,9 +76,33 @@ void maze_render(){
 }
 
 
+void delete_crumb(){
+    int i, j;
+        for (i = 0; i < rows; ++i) {
+                for (j = 0; j < cols; ++j) {
+                        if (visited[i][j] == crumb) {
+                                visited[i][j] = crumb;
+                        }
+                }
+        }
+}
+
+
 void maze_reset(){
      state_row = start_row;
      state_col = start_col;
+     delete_crumb();
+
+     // On enlève les points tracés par les dfs précédents
+     int i, j;
+        for (i = 0; i < rows; ++i) {
+                for (j = 0; j < cols; ++j) {
+                        if (maze[i][j] == '.') {
+                                maze[i][j] = ' ';
+                        }
+                }
+        }
+
 }
 
 envOutput maze_step(action a){
@@ -88,6 +112,7 @@ envOutput maze_step(action a){
     envOutput stepOut;
 
     // Pour chaque situation, on doit prendre en compte les bordes et les murs, et appliquer des récompenses négatives
+
 
     if (a==up){
        if (max(0,state_row -1) == 0) {stepOut.reward = wall_reward;}
@@ -150,6 +175,7 @@ void alloc_visited()
                 visited[i] = malloc(cols * sizeof(int*));
         }
 }
+
 
 
 void init_visited()

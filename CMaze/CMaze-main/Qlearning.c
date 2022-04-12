@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "Qlearning.h"
 #include "functions.h"
@@ -85,13 +86,54 @@ int action_to_int(action a)
 }
 
 
-/* Fonction d'apprentissage */
+// La fonction env_action_sample fait déjà le travail
+// Pour dfs2
+action next_move(){
+    return env_action_sample2();
+}
 
-void learn()
-{
+
+// Fonction qui trouve le chemin
+int dfs2(){
+    // int* current = &visited[row][col];
+
+    state_row = start_row;
+    state_col = start_col;
+
+    envOutput next;
+
+    delete_crumb(); //On enlève les crumbs éventuels
+
+    // while ((state_row =! goal_row) || (state_col != goal_col))
+    for (int i = 0; i < 10; ++i) // On teste pour 10 répététions
+    {
+        next = maze_step(next_move());
+        state_row = next.new_row;
+        state_col = next.new_col;
+        visited[state_row][state_col] = crumb;
+    }
+
+    return 1;
+}
+
+
+// Ajoute les points sur la map
+void add_crumbs(){
+     for (int i=0; i<rows; i++){
+          for (int j=0; j<cols; j++){
+              if (visited[i][j] ==crumb){
+                  maze[i][j] ='.';
+              }
+          }
+     }
+     maze[start_row][start_col]= 's';
+}
+
+
+// Effectue une boucle d'apprentissage: part de l'état initial, va jusqu'à l'état final ou s'arrête au bout d'un certain nombre d'itérations
+void one_learning(){
+
 	// Variables :
-
-	int n = 0; // Nombre de répétition de la boucle
 	double r; // Variable correspondant à la récompense
 	action a;
 	int a_nb;
@@ -102,14 +144,12 @@ void learn()
 	double g = 0.9;
 	alpha = 0.5;
 
-	double max_occurence = 10000;
 
-	while(n < max_occurence)
-	{
-		maze_reset();
-		s = start_row*cols + start_col; // Etat initial
+	// Initialisation 
+	maze_reset();
+	s = start_row*cols + start_col; // Etat initial
 
-		while(s != goal_row*cols + goal_col)
+	while(s != goal_row*cols + goal_col)
 		{
 
 			// Choix de l'action: (POUR L'INSTANT ON LA PREND ALEATOIRE)
@@ -134,7 +174,68 @@ void learn()
 			s = future_s;
 			// visited[state_row][start_col] = unknown;
 		}
-		n++;
+}
+
+/* Fonction d'apprentissage */
+
+void learn()
+{
+	// On va apprendre progressivement, en traçant à chaque tur de boucle le trajet choisi par le tableau Q calculé
+	// En gros on reprend la structure du main mais on le boucle
+
+	// Initialisation du 
+	printf("left %d\n", left);
+    maze_make("maze.txt");
+    init_visited();
+
+    printf("%d, %d \n", rows, cols);
+    printf("Number of actions :  %d \n", number_actions); 
+    maze_render();
+
+    // Initialisation du tableau Q
+    alloc_table_reward();
+    fill_tableau();
+
+    // Variable d'entrée clavier
+    char entree[100] = "\n";
+
+    //Nombre d'apprentissages
+    int number_learning = 0;
+
+
+	while(strcmp(entree, "\n") == 0 || strcmp(entree, "r\n") == 0)
+	{
+		maze_reset();
+
+		// On fait une boucle d'apprentissage
+		one_learning();
+		number_learning++;
+
+
+
+		// On trouve le chemin :
+    	dfs2(start_row,start_col);
+    	add_crumbs();
+
+		// Puis on donne le tableau Q, et on trace le chemin trouvé
+		print_table_reward();
+
+		maze_render();
+
+		printf("Nombre d'apprentissages : %d\n\n", number_learning);
+
+
+		// On entre si on souhaite continuer
+		printf("Continuer ? ");
+		fgets(entree, 100, stdin);
+
+		// On peut ajouter l'option reset, qui réinitialise le tableau Q
+		// Ne fonctionne pas pour le moment
+		if (strcmp(entree, "r\n") == 0)
+		{
+			fill_tableau();
+			number_learning = 0;
+		}
 	}
 
 }
