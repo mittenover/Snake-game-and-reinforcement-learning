@@ -197,6 +197,68 @@ void one_learning(){
 		}
 }
 
+
+//
+void one_learning_sarsa(){
+
+	// Variables :
+	double r; // Variable correspondant à la récompense
+	action a;
+	action a2;
+	int a_nb;
+	int a_nb2;
+	int s; // Ligne correspondant à l'état actuel
+	int future_s; //Ligne correspondant à l'état futur
+	double max_future_s; // Calcul de max(Q(s', a))
+	envOutput state;
+	double g = 0.9;
+	alpha = 0.02;
+	int old_state_row;
+	int old_state_col;
+
+
+	// Initialisation 
+	maze_reset();
+	s = start_row*cols + start_col; // Etat initial
+
+	// Choix de l'action:
+	a = env_action_greedy();
+	a_nb = action_to_int(a);
+
+	while(s != goal_row*cols + goal_col)
+		{
+			state = maze_step(a);
+
+			// Effectue l'action et en déduit une récompense, et la valeur de l'état futur :
+			r = state.reward;
+			future_s = state.new_row*cols + state.new_col;
+
+			// On réactualise la position pour que le choix de l'action a' se fasse par rapport à l'état futur :
+			// On enregistre les aciennes positions :
+			old_state_row = state_row;
+			old_state_col = state_col;
+			state_row = state.new_row;
+			state_col = state.new_col;
+
+			// Choix de l'action a2:
+			a2 = env_action_greedy();
+			a_nb2 = action_to_int(a);
+
+			// On se replace dans l'état s
+			state_row = old_state_row;
+			state_col = old_state_col;
+
+			table_reward[s][a_nb] = table_reward[s][a_nb] + alpha *(r + g * table_reward[s][a_nb2] - table_reward[s][a_nb]);
+
+			state_row = state.new_row;
+			state_col = state.new_col;
+			s = future_s;
+			a = a2;
+			a_nb = action_to_int(a);
+			// visited[state_row][start_col] = unknown;
+		}
+}
+
 /* Fonction d'apprentissage */
 
 void learn(char *maze)

@@ -22,6 +22,10 @@ int action_to_int(action a);
 
 void learn(char *maze);
 
+void one_learning();
+
+void one_learning_sarsa();
+
 int dfs2();
 
 void add_crumbs();

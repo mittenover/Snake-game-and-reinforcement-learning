@@ -205,7 +205,7 @@ action env_action_greedy(double epsilon){
     double n = (double)(rand() % 100000)/100000;
     // printf("%f\n", n);
 
-    epsilon = 0.7;
+    epsilon = 1;
     if (n < epsilon)
     {
         return (enum action)(rand() % number_actions); // Aléatoirement
