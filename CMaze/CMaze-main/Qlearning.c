@@ -199,14 +199,14 @@ void one_learning(){
 
 /* Fonction d'apprentissage */
 
-void learn()
+void learn(char *maze)
 {
 	// On va apprendre progressivement, en traçant à chaque tur de boucle le trajet choisi par le tableau Q calculé
 	// En gros on reprend la structure du main mais on le boucle
 
 	// Initialisation du 
 	printf("left %d\n", left);
-    maze_make("maze.txt");
+    maze_make(maze);
     init_visited();
 
     printf("%d, %d \n", rows, cols);

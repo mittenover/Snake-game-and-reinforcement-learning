@@ -20,7 +20,7 @@ double max_future_state(int s);
 
 int action_to_int(action a);
 
-void learn();
+void learn(char *maze);
 
 int dfs2();
 

@@ -32,12 +32,12 @@ int dfs(int row, int col){
 }
 
 
-int main(){
+int main(int argc, char *argv[]){
 
     // On redéfinit l'aléatoire
     srand(time(0));
 
-    learn();
+    learn(argv[1]);
     
     return 0;
 }
