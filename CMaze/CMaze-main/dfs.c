@@ -1,3 +1,5 @@
+#include <time.h>
+
 #include "mazeEnv.h"
 #include "Qlearning.h"
 
@@ -32,18 +34,11 @@ int dfs(int row, int col){
 
 int main(){
 
+    // On redéfinit l'aléatoire
+    srand(time(0));
+
     learn();
-
-    // On trouve le chemin :
-    dfs2(start_row,start_col);
-    add_crumbs();
-
-    // On affiche le chemin :
-    maze_render();
-
-    // On peut éventuellement afficher te tableau Q
-    print_table_reward();
-
+    
     return 0;
 }
 

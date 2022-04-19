@@ -125,7 +125,7 @@ int dfs2(){
     delete_crumb(); //On enlève les crumbs éventuels
 
     // while ((state_row =! goal_row) || (state_col != goal_col))
-    for (int i = 0; i < 100; ++i) // On teste pour 10 répététions
+    for (int i = 0; i < 1000; ++i) // On teste pour 10 répététions
     {
         next = maze_step(next_move());
         state_row = next.new_row;
@@ -166,7 +166,7 @@ void one_learning(){
 	double max_future_s; // Calcul de max(Q(s', a))
 	envOutput state;
 	double g = 0.9;
-	alpha = 0.5;
+	alpha = 0.02;
 
 
 	// Initialisation 
@@ -177,7 +177,7 @@ void one_learning(){
 		{
 
 			// Choix de l'action: (POUR L'INSTANT ON LA PREND ALEATOIRE)
-			a = env_action_sample();
+			a = env_action_greedy();
 			a_nb = action_to_int(a);
 
 			state = maze_step(a);
@@ -238,16 +238,40 @@ void learn()
     	add_crumbs();
 
 		// Puis on donne le tableau Q, et on trace le chemin trouvé
-		print_table_reward();
+		// print_table_reward();
 
 		maze_render();
 
 		printf("Nombre d'apprentissages : %d\n\n", number_learning);
 
+		// On entre si on souhaite continuer
+		printf("Continuer ? ");
+		fgets(entree, 100, stdin);
+
+		// Affichage des commandes disponibles
+		if (strcmp(entree, "c\n") == 0)
+		{
+		printf("\nLes commandes disponibles sont :\n");
+		printf("- r pour reset : recommence l'apprentissage.\n");
+		printf("- q pour afficher le tableau Q du Qlearning.\n");
+		printf("- entrée pour continuer l'apprentissage.\n\n");
 
 		// On entre si on souhaite continuer
 		printf("Continuer ? ");
 		fgets(entree, 100, stdin);
+		}
+
+
+		// Vérification du tableau Q
+		if (strcmp(entree, "q\n") == 0)
+		{
+			printf("\nAffichage du tableau Q :\n");
+			print_table_reward();
+
+		// On entre si on souhaite continuer
+		printf("Continuer ? ");
+		fgets(entree, 100, stdin);
+		}
 
 		// On peut ajouter l'option reset, qui réinitialise le tableau Q
 		// Ne fonctionne pas pour le moment

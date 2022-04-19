@@ -58,6 +58,8 @@ action env_action_sample();
 
 action env_action_sample2();
 
+action env_action_greedy();
+
 void alloc_visited();
 
 void init_visited();

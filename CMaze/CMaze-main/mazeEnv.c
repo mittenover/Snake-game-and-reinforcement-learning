@@ -143,14 +143,14 @@ envOutput maze_step(action a){
     switch (visited[nouv_row][nouv_col]){
         case unknown:
             // Si la case est inconnue, elle devient crumb (rencontrée), et la récompense est positive. Le sujet bouge
-            stepOut.reward = 0.01;
+            stepOut.reward = 1;
             stepOut.new_row = nouv_row;
             stepOut.new_col = nouv_col;
             visited[nouv_row][nouv_col] = crumb;
         break;
         case wall:
             // Si c'est un mur, on avance pas et la recompense est négative
-            stepOut.reward = -1;
+            stepOut.reward = -10;
             stepOut.new_row = state_row;
             stepOut.new_col = state_col;
         break;
@@ -178,11 +178,42 @@ action env_action_sample(){
 }
 
 action env_action_sample2(){
-    action max = up;
-    if (table_reward[cols*state_row + state_col][1] > table_reward[cols*state_row + state_col][max]) {max = down;}
-    if (table_reward[cols*state_row + state_col][2] > table_reward[cols*state_row + state_col][max]) {max = right;}
-    if (table_reward[cols*state_row + state_col][3] > table_reward[cols*state_row + state_col][max]) {max = left;}
-    return (enum action)(max);
+    int s = state_row*cols + state_col;
+    double max = table_reward[s][0];
+    action result = up;
+
+    if (table_reward[s][1] > max)
+    {
+        max = table_reward[s][1];
+        result = down;
+    }
+    if (table_reward[s][2] > max)
+    {
+        max = table_reward[s][2];
+        result = right;
+    }
+    if (table_reward[s][3] > max)
+    {
+        max = table_reward[s][3];
+        result = left;
+    }
+    return  result;
+}
+
+action env_action_greedy(double epsilon){
+    // Pour l'instant je ne sais pas chosir un nombre aléatoire facilement, on va y aller bourrin
+    double n = (double)(rand() % 100000)/100000;
+    // printf("%f\n", n);
+
+    epsilon = 0.7;
+    if (n < epsilon)
+    {
+        return (enum action)(rand() % number_actions); // Aléatoirement
+    }
+    else {
+        return env_action_sample2();
+    }
+
 }
 
 void alloc_visited()
