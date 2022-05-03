@@ -6,6 +6,7 @@
 
 #include "gameEnv.h"
 
+double***** table_reward;
 double alpha;
 double epsilon;
 
