@@ -15,11 +15,29 @@ int state_col;
 int goal_row;
 int goal_col;
 
+enum terrain{
+    wall,
+    fruit,
+    snake
+};
+
+enum action{
+     up,
+     down,
+     left,
+     right,
+     number_actions 
+};
+
+
+
 void alloc_grid();
 
 void grid_make(int);
 
 void grid_render(); 
+
+void new_fruit();
 
 
 #endif
