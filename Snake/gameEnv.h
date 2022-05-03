@@ -17,7 +17,7 @@ int goal_col;
 
 void alloc_grid();
 
-void grid_make(char* );
+void grid_make(int);
 
 void grid_render(); 
 
