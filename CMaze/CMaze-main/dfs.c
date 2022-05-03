@@ -34,6 +34,12 @@ int dfs(int row, int col){
 
 int main(int argc, char *argv[]){
 
+
+    if (argc != 2)
+    {
+        printf("Erreur : pas de fchier en entrée.\n");
+        return 0;
+    }
     // On redéfinit l'aléatoire
     srand(time(0));
 

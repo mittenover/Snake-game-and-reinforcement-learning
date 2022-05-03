@@ -156,13 +156,13 @@ envOutput maze_step(action a){
         break;
         case crumb:
             // Si déjà rencontrée, on avance mais on applique une récompense négative
-            stepOut.reward = -0.01;
+            stepOut.reward = -0.1;
             stepOut.new_row = nouv_row;
             stepOut.new_col = nouv_col;
         break;
         case goal:
             // Si c'est l'objectif on se place dessus et on done une bonne récompense
-            stepOut.reward = 1;
+            stepOut.reward = 10;
             stepOut.new_row = nouv_row;
             stepOut.new_col = nouv_col;
         break;
