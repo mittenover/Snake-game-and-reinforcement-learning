@@ -27,6 +27,3 @@ void grid_render(){
      }
      printf("\n");
 }
-
-
-     
