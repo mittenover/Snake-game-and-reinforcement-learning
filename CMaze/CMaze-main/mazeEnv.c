@@ -213,7 +213,32 @@ action env_action_greedy(double epsilon){
     else {
         return env_action_sample2();
     }
+}
 
+action env_action_boltzmann(int s, action a)
+{
+    // On fait la somme des exponentielles
+    double sum = 0;
+    for (int i = 0; i < 4; ++i)
+    {
+        // Problème avec l'exponentielle
+        // sum = sum + exp(table_reward[s][i]);
+    }
+
+    double proba = table_reward[s][a]/sum;
+    // On détermine l'action future
+
+    // Pour l'instant je ne sais pas chosir un nombre aléatoire facilement, on va y aller bourrin
+    double n = (double)(rand() % 100000)/100000;
+    // printf("%f\n", n);
+
+    if (n < proba)
+    {
+        return (enum action)(rand() % number_actions); // Aléatoirement
+    }
+    else {
+        return env_action_sample2();
+    }
 }
 
 void alloc_visited()

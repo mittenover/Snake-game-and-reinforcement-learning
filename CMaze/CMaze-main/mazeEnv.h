@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
 
 char** maze;
@@ -58,7 +59,9 @@ action env_action_sample();
 
 action env_action_sample2();
 
-action env_action_greedy();
+action env_action_greedy(double epsilon);
+
+action env_action_boltzmann(int s, action a);
 
 void alloc_visited();
 
