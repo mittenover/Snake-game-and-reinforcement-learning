@@ -45,6 +45,7 @@ int main(int argc, char *argv[]){
 
     learn(argv[1]);
     
+    free(table_reward);
     return 0;
 }
 

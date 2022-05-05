@@ -5,26 +5,32 @@
 #include "Qlearning.h"
 #include "gameEnv.h"
 
-double***** alloc_table_reward()
+double****** alloc_table_reward()
 {
 	// On est obligé de créer 5 boucle pour créer un tableau de flottant à 5 dimensions
-	double***** table_reward = malloc(sizeof(double****)*dim);
+	double****** table_reward = malloc(sizeof(double*****)*dim);
 
 	for (int i = 0; i < dim; ++i)
 	{
-		table_reward[i] = malloc(sizeof(double***)*15);
+		table_reward[i] = malloc(sizeof(double****)*15);
 
 		for (int j = 0; j < dim; ++j)
 		{
-			table_reward[i][j] = malloc(sizeof(double**)*15);
+			table_reward[i][j] = malloc(sizeof(double***)*15);
 
 			for (int k = 0; k < dim; ++k)
 			{
-				table_reward[i][j][k] = malloc(sizeof(double*)*15);
+				table_reward[i][j][k] = malloc(sizeof(double**)*15);
 
 				for (int l = 0; l < dim; ++l)
 				{
-					table_reward[i][j][k][l] = malloc(sizeof(double)*5);
+					table_reward[i][j][k][l] = malloc(sizeof(double*)*5);
+
+					for (int m = 0; m < 4; ++m)
+					{
+						
+						table_reward[i][j][k][l][m] = malloc(sizeof(double)*4);
+					}
 				}
 			}
 		}
@@ -34,7 +40,7 @@ double***** alloc_table_reward()
 }
 
 
-void fill_table(double***** table_reward)
+void fill_table(double****** table_reward)
 {
 	for (int i = 0; i < dim; ++i)
 	{
@@ -46,7 +52,10 @@ void fill_table(double***** table_reward)
 				{
 					for (int m = 0; m < 5; ++m)
 					{
-						table_reward[i][j][k][l][m] = rand() % 2;
+						for (int n = 0; n < 4; ++n)
+						{
+						table_reward[i][j][k][l][m][n] = rand() % 2;
+						}
 					}
 				}
 			}
