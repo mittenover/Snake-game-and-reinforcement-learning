@@ -27,3 +27,11 @@ void grid_render(){
      }
      printf("\n");
 }
+
+
+void new_fruit(){
+	int i=rand()%dim;
+	int j=rand()%dim;
+	
+
+}
