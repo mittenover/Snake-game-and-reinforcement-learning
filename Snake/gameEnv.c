@@ -9,8 +9,8 @@ void alloc_grid(){  //On alloue dynamiquement un tableau carré de caractère de
      }
 }
 
-void grid_make(int size){
-	for(int i=0;i<size;++i){
+void grid_make(int dim){
+	for(int i=0;i<dim;++i){
 		grid[i][0]='+';
 		grid[0][i]='+';
 		grid[size-1][i]='+';
