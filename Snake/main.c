@@ -18,13 +18,15 @@ int main(int argc, char const *argv[])
 	grid_make();
 	grid_render();
 	init_snake();
-	// grid_render();
+	grid_render();
 	
 	while(queue != NULL)
 	{
+		printf("Je désalloue\n");
 		free(queue->elem);
 		queue = queue->next;
 	}
-	free(queue->next);
+	free(queue);
+	printf("Finis");
 	return 0;
 }

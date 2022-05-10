@@ -2,8 +2,6 @@
 #include "Qlearning.h"
 
 
-start_col=5;
-start_row=8;
 
 
 
@@ -63,13 +61,14 @@ void new_fruit(){
 }
 
 void init_snake(){  //Création du serpent initial qui occupe 3 cases
+	queue=malloc(sizeof(struct queue));
+	printf("Première allocation réussis\n");
 	printf("yo\n");
 	struct bout_queue *b0 = malloc(sizeof(struct bout_queue));
 	printf("yo bis\n");
 	b0->queue_col=start_col;
 	b0->queue_row=start_row;
 	printf("yo bis bis\n");
-	queue->elem = malloc(sizeof(struct bout_queue));
 	queue->elem = b0;
 	printf("yo2\n");
 
@@ -88,6 +87,7 @@ void init_snake(){  //Création du serpent initial qui occupe 3 cases
 	next_1->next = next_2;
 	queue->next = next_1;
 	for(int i=0;i<3;++i){
+		printf("pas de pb\n");
 		grid[start_row][start_col-i]='.';
 	}
 }
