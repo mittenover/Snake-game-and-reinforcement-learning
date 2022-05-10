@@ -44,7 +44,6 @@ struct bout_queue{    //Coordonnées d'un bout de queue
 };
 
 struct queue{     //Structure de liste représentant le serpent
-    int indice;
     struct bout_queue *elem;
     struct queue *next;
 };
