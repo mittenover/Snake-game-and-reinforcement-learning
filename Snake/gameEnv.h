@@ -30,6 +30,8 @@ enum action{
      number_actions 
 };
 
+typedef enum action action ;
+
 struct envOutput{
   int new_col;
   int new_row;
@@ -58,6 +60,8 @@ void grid_render();
 void new_fruit();
 
 void init_snake();
+
+void eat_a_fruit(action a);
 
 
 #endif

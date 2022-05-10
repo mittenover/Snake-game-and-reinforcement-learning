@@ -22,11 +22,9 @@ int main(int argc, char const *argv[])
 	
 	while(queue != NULL)
 	{
-		printf("Je désalloue\n");
 		free(queue->elem);
 		queue = queue->next;
 	}
 	free(queue);
-	printf("Finis");
 	return 0;
 }

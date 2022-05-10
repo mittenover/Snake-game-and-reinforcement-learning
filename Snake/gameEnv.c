@@ -61,16 +61,15 @@ void new_fruit(){
 }
 
 void init_snake(){  //Création du serpent initial qui occupe 3 cases
-	queue=malloc(sizeof(struct queue));
-	printf("Première allocation réussis\n");
-	printf("yo\n");
+	queue=malloc(sizeof(struct queue));  //Allocation de la liste représentant le serpent
+
 	struct bout_queue *b0 = malloc(sizeof(struct bout_queue));
-	printf("yo bis\n");
+	
 	b0->queue_col=start_col;
 	b0->queue_row=start_row;
-	printf("yo bis bis\n");
+	
 	queue->elem = b0;
-	printf("yo2\n");
+	
 
 	struct queue *next_1 = malloc(sizeof(struct queue));
 	struct bout_queue *b1 = malloc(sizeof(struct bout_queue));
@@ -87,7 +86,49 @@ void init_snake(){  //Création du serpent initial qui occupe 3 cases
 	next_1->next = next_2;
 	queue->next = next_1;
 	for(int i=0;i<3;++i){
-		printf("pas de pb\n");
+		
 		grid[start_row][start_col-i]='.';
 	}
+}
+
+void eat_a_fruit(action a){ //Cette fonction applique la transformation sur le serpent lorsqu'il mange un fruit à la suite de l'action a
+	
+	struct queue *queue_queue=malloc(sizeof(struct queue));  //Création de la queue (temporaire) qu'on va rajouter à la suite de la nouvelle tete qui prend la place du fruit
+	queue_queue=queue;
+
+	struct bout_queue *new_bout=malloc(sizeof(struct bout_queue)); //Création (permanente) des coordonnées de la nouvelle tete
+
+	//Modification de la tete du serpent qui prend la place du fruit
+    switch (a){
+        case up:
+            new_bout->queue_row+=1;
+        break;
+
+        case down:
+            new_bout->queue_row-=1;
+
+        break;
+
+        case right:
+            new_bout->queue_col+=1;
+
+        break;
+
+        case left:
+            new_bout->queue_col-=1;
+        break;
+
+        default:
+        break;
+
+        queue->elem=new_bout; //On remplace la tete du seprent par la nouvelle tete
+        queue->next=queue_queue; //La nouvelle queue du serpent correspond à l'ancien serpent en entier
+
+    }
+
+
+
+
+    free(queue_queue);
+
 }
