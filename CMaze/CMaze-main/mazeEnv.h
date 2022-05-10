@@ -40,7 +40,6 @@ struct envOutput{
   int new_row;
   int reward;
   int done;
-
 };
 
 typedef struct envOutput envOutput;
@@ -59,7 +58,7 @@ action env_action_sample();
 
 action env_action_sample2();
 
-action env_action_greedy(double epsilon);
+action env_action_greedy();
 
 action env_action_boltzmann(int s, action a);
 

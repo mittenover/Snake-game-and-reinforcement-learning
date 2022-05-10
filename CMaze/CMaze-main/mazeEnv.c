@@ -200,7 +200,7 @@ action env_action_sample2(){
     return  result;
 }
 
-action env_action_greedy(double epsilon){
+action env_action_greedy(){
     // Pour l'instant je ne sais pas chosir un nombre aléatoire facilement, on va y aller bourrin
     double n = (double)(rand() % 100000)/100000;
     // printf("%f\n", n);
