@@ -33,11 +33,11 @@ void new_fruit(){
 	int i=rand()%dim;
 	int j=rand()%dim;
 	int k=0;
-	while((grid[i][j]==wall)&&(k<100*size**2)){
+	while((grid[i][j]==wall)&&(k<100*dim*dim)){  //on tire des positions aléatoire dans la grille, si cette position correspond à un mur on retire jusqu'à avoir une position vide. Le compteur k permet de mettre une limite sur les tirages au cas où à la fun du jeu plus aucune position ne peut accueillir de fruit
 		i=rand()%dim;
 		j=rand()%dim;
 		k+=1;
 	}
-	grid[i][j]='°';
+	grid[i][j]='f';
 
 }
