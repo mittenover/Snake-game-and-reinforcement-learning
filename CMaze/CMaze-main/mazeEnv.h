@@ -60,7 +60,7 @@ action env_action_sample2();
 
 action env_action_greedy();
 
-action env_action_boltzmann(int s, action a);
+action env_action_boltzmann(int s);
 
 void alloc_visited();
 
