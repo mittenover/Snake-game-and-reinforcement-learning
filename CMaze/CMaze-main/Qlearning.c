@@ -177,7 +177,7 @@ void one_learning(){
 		{
 
 			// Choix de l'action: (POUR L'INSTANT ON LA PREND ALEATOIRE)
-			a = env_action_greedy();
+			a = env_action_boltzmann(s);
 			a_nb = action_to_int(a);
 
 			state = maze_step(a);

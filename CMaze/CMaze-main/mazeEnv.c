@@ -215,8 +215,10 @@ action env_action_greedy(){
     }
 }
 
-action env_action_boltzmann(int s, action a)
+action env_action_boltzmann(int s)
 {
+    // POUR L'INSTANT BOUCLE INFINIE
+
     // On fait la somme des exponentielles
     double sum = 0;
     for (int i = 0; i < 4; ++i)
@@ -225,19 +227,35 @@ action env_action_boltzmann(int s, action a)
         // sum = sum + exp(table_reward[s][i]);
     }
 
-    double proba = table_reward[s][a]/sum;
+    double proba0 = table_reward[s][0]/sum;
+    double proba1 = table_reward[s][1]/sum;
+    double proba2 = table_reward[s][2]/sum;
+    double proba3 = table_reward[s][3]/sum;
     // On détermine l'action future
 
     // Pour l'instant je ne sais pas chosir un nombre aléatoire facilement, on va y aller bourrin
     double n = (double)(rand() % 100000)/100000;
     // printf("%f\n", n);
 
-    if (n < proba)
+    if (n < proba0)
     {
-        return (enum action)(rand() % number_actions); // Aléatoirement
+        enum action future_a = up;
+        return future_a;
     }
-    else {
-        return env_action_sample2();
+    else if (n < proba0 + proba1)
+    {
+        enum action future_a = down;
+        return future_a;
+    }
+    else if (n < proba0 + proba1 + proba2)
+    {
+        enum action future_a = left;
+        return future_a;
+    }
+    else
+    {
+        enum action future_a = right;
+        return future_a;
     }
 }
 
