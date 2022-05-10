@@ -36,6 +36,19 @@ struct envOutput{
   int done;
 };
 
+
+
+struct bout_queue{    //Coordonnées d'un bout de queue
+    int queue_col;
+    int queue_row;
+};
+
+struct queue{     //Structure de liste représentant le serpent
+    int indice;
+    struct bout_queue *elem;
+    struct queue *next;
+};
+
 void alloc_grid();
 
 void grid_make(int);
