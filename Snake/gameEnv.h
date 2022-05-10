@@ -29,7 +29,12 @@ enum action{
      number_actions 
 };
 
-
+struct envOutput{
+  int new_col;
+  int new_row;
+  int reward;
+  int done;
+};
 
 void alloc_grid();
 

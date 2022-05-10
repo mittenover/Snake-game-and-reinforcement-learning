@@ -65,46 +65,44 @@ void fill_table(double****** table_reward)
 	return;
 }
 
+// Enter the table reward you want to reset it gives you a blank one.
+double****** reset_table_reward(double****** table_reward)
+{
+	free(table_reward);
+
+	double****** new_table_reward = alloc_table_reward();
+	fill_table(new_table_reward);
+
+	return new_table_reward;
+}
+
 
 // Effectue une boucle d'apprentissage: part de l'état initial, va jusqu'à l'état final ou s'arrête au bout d'un certain nombre d'itérations
 void one_learning(){
 
 	// Variables :
 	double r; // Variable correspondant à la récompense
-	action a;
-	int a_nb;
-	int s; // Ligne correspondant à l'état actuel
-	int future_s; //Ligne correspondant à l'état futur
-	double max_future_s; // Calcul de max(Q(s', a))
-	envOutput state;
+	enum action a;
+	struct envOutput state;
 	double g = 0.9;
 	alpha = 0.02;
 
 
-	// Initialisation 
-	grid_reset();
-	s = start_row*cols + start_col; // Etat initial
+	// Initialisation
 
-	while(s != goal_row*cols + goal_col)
+	while(0==0) // Définir la condition d'arrêt
 		{
 
-			// Choix de l'action: (POUR L'INSTANT ON LA PREND ALEATOIRE)
-			a = env_action_greedy();
-			a_nb = action_to_int(a);
+			// Choix de l'action:
+			// a = env_action_sample(); // Attendre que la fonction soit définie dans gameEnv
 
-			state = maze_step(a);
+			// state = maze_step(a); // Attendre que la fonction soit définie dans gameEnv
 
 			// Effectue l'action et en déduit une récompense, et la valeur de l'état futur :
 			r = state.reward;
-			future_s = state.new_row*cols + state.new_col;
-
-			max_future_s = max_future_state(future_s);
-
-			table_reward[s][a_nb] = table_reward[s][a_nb] + alpha *(r + g * max_future_s - table_reward[s][a_nb]);
 
 			state_row = state.new_row;
 			state_col = state.new_col;
-			s = future_s;
 			// visited[state_row][start_col] = unknown;
 		}
 }
@@ -124,7 +122,7 @@ void learn(char *maze)
 
     // Initialisation du tableau Q
     table_reward = alloc_table_reward();
-    fill_tableau(table_reward);
+    fill_table(table_reward);
 
     // Variable d'entrée clavier
     char entree[100] = "\n";
@@ -156,26 +154,6 @@ void learn(char *maze)
 		// On entre si on souhaite continuer
 		printf("Continuer ? ");
 		fgets(entree, 100, stdin);
-		}
-
-
-		// Vérification du tableau Q
-		if (strcmp(entree, "q\n") == 0)
-		{
-			printf("\nAffichage du tableau Q :\n");
-			print_table_reward();
-
-		// On entre si on souhaite continuer
-		printf("Continuer ? ");
-		fgets(entree, 100, stdin);
-		}
-
-		// On peut ajouter l'option reset, qui réinitialise le tableau Q
-		// Ne fonctionne pas pour le moment
-		if (strcmp(entree, "r\n") == 0)
-		{
-			fill_tableau();
-			number_learning = 0;
 		}
 	}
 }
