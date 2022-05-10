@@ -13,8 +13,8 @@ void grid_make(int dim){
 	for(int i=0;i<dim;++i){
 		grid[i][0]='+';
 		grid[0][i]='+';
-		grid[size-1][i]='+';
-		grid[0][size-1]='+';
+		grid[dim-1][i]='+';
+		grid[0][dim-1]='+';
 	}
 }
 
