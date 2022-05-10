@@ -10,18 +10,21 @@ int main(int argc, char const *argv[])
 		return 0;
 	}
 
-	
-start_col=5;
-start_row=8;
+	dim=17;
+	start_col=5;
+	start_row=8;
 
 	alloc_grid();
-	grid_make(17);
+	grid_make();
 	grid_render();
 	init_snake();
-	grid_render();
+	// grid_render();
 	
-
-
-	
+	while(queue != NULL)
+	{
+		free(queue->elem);
+		queue = queue->next;
+	}
+	free(queue->next);
 	return 0;
 }

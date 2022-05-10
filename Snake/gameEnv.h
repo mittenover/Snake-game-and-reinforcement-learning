@@ -51,7 +51,7 @@ struct queue{     //Structure de liste représentant le serpent
 
 void alloc_grid();
 
-void grid_make(int);
+void grid_make();
 
 void grid_render(); 
 

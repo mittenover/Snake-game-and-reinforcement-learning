@@ -16,13 +16,25 @@ void alloc_grid(){  //On alloue dynamiquement un tableau carré de caractère de
      }
 }
 
-void grid_make(int size){
-	for(int i=0;i<size;++i){
+void grid_make(){
+	for(int i=0;i<dim;++i){
 		grid[i][0]='+';
 		grid[0][i]='+';
-		grid[size-1][i]='+';
-		grid[0][size-1]='+';
+		grid[dim-1][i]='+';
+		grid[i][dim-1]='+';
 	}
+
+	for (int i = 0; i < dim; ++i)
+	{
+		for (int j = 0; j < dim; ++j)
+		{
+			if (grid[i][j] != '+' && grid[i][j] != '.')
+			{
+				grid[i][j] = ' ';
+			}
+		}
+	}
+
 }
 
 void grid_render(){
@@ -51,19 +63,24 @@ void new_fruit(){
 }
 
 void init_snake(){  //Création du serpent initial qui occupe 3 cases
-	struct bout_queue *b0;
+	printf("yo\n");
+	struct bout_queue *b0 = malloc(sizeof(struct bout_queue));
+	printf("yo bis\n");
 	b0->queue_col=start_col;
 	b0->queue_row=start_row;
-	queue->elem=b0;
+	printf("yo bis bis\n");
+	queue->elem = malloc(sizeof(struct bout_queue));
+	queue->elem = b0;
+	printf("yo2\n");
 
-	struct queue *next_1;
-	struct bout_queue *b1;
+	struct queue *next_1 = malloc(sizeof(struct queue));
+	struct bout_queue *b1 = malloc(sizeof(struct bout_queue));
 	b1->queue_col=start_col-1;
 	b1->queue_row=start_row-1;
 	next_1->elem=b1;
 
-	struct queue *next_2;
-	struct bout_queue *b2;
+	struct queue *next_2 = malloc(sizeof(struct queue));
+	struct bout_queue *b2 = malloc(sizeof(struct bout_queue));
 	b2->queue_col=start_col-2;
 	b2->queue_row=start_row-2;
 	next_2->elem=b2;
