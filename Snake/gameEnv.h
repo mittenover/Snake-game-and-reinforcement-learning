@@ -6,6 +6,7 @@
 
 
 char** grid;
+struct queue *queue;
 int** visited;
 int dim;
 int start_row;
@@ -55,6 +56,8 @@ void grid_make(int);
 void grid_render(); 
 
 void new_fruit();
+
+void init_snake();
 
 
 #endif
