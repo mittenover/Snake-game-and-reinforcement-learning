@@ -1,6 +1,7 @@
 #include "functions.h"
 #include "gameEnv.h"
 #include "Qlearning.h"
+#include <time.h>
 
 int main(int argc, char const *argv[])
 {
@@ -10,6 +11,8 @@ int main(int argc, char const *argv[])
 		return 0;
 	}
 
+	srand(time(0));
+
 	dim=17;
 	start_col=5;
 	start_row=8;
@@ -17,6 +20,7 @@ int main(int argc, char const *argv[])
 	alloc_grid();
 	grid_make();
 	grid_render();
+	new_fruit();
 	init_snake();
 	grid_render();
 	

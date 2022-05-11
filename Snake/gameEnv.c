@@ -48,12 +48,12 @@ void grid_render(){
 
 
 void new_fruit(){
-	int i=rand()%dim;
-	int j=rand()%dim;
+	int i=rand()%(dim-2) + 1;
+	int j=rand()%(dim-2) + 1;
 	int k=0;
 	while((grid[i][j]==wall)||(grid[i][j]==snake)||(k<100*dim*dim)){  //on tire des positions aléatoire dans la grille, si cette position correspond à un mur on retire jusqu'à avoir une position vide. Le compteur k permet de mettre une limite sur les tirages au cas où à la fun du jeu plus aucune position ne peut accueillir de fruit
-		i=rand()%dim;
-		j=rand()%dim;
+		i=rand()%(dim-2) + 1;
+		j=rand()%(dim-2) + 1;
 		k+=1;
 	}
 	grid[i][j]='f';
