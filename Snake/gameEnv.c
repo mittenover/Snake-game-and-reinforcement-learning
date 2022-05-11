@@ -63,6 +63,8 @@ void new_fruit(){
 }
 
 void init_snake(){  //Création du serpent initial qui occupe 3 cases
+	size_snake=3; //AU début le serpent est de longueur 3
+
 	queue=malloc(sizeof(struct queue));  //Allocation de la liste représentant le serpent
 
 	struct bout_queue *b0 = malloc(sizeof(struct bout_queue));
@@ -93,7 +95,7 @@ void init_snake(){  //Création du serpent initial qui occupe 3 cases
 	}
 }
 
-void eat_a_fruit(){ //Cette fonction applique la transformation sur le serpent lorsqu'il mange un fruit à la suite de l'action a
+void eat_a_fruit(){ //Cette fonction applique la transformation sur le serpent lorsqu'il mange un fruit
 	
 	struct queue *queue_queue=malloc(sizeof(struct queue));  //Création de la queue (temporaire) qu'on va rajouter à la suite de la nouvelle tete qui prend la place du fruit
 	queue_queue=queue;
@@ -108,9 +110,51 @@ void eat_a_fruit(){ //Cette fonction applique la transformation sur le serpent l
 	queue->elem=new_bout;
 	queue->next=queue_queue;
 
+	size_snake+=1; //LOrsque l'on mange un fruit la taille du serpent augmente de 1
+
 
 
 
     free(queue_queue);
 
+}
+
+void n_eat_a_fruit(action a){  //Cette fonction applique la transformation sur le seprent lorsqu'il avance sans manger un fruit, à priori on est obligé de prendre l'action a en argument
+	struct queue *queue_queue=malloc(sizeof(struct queue));  //Création de la queue (temporaire) qu'on va rajouter à la suite de la nouvelle tete qui prend la place du fruit
+	queue_queue=queue;
+
+	struct bout_queue *new_bout=malloc(sizeof(struct bout_queue)); //Création (permanente) des coordonnées de la nouvelle tete
+	new_bout=queue->elem; //Avant l'aciton on est au niveau de l'ancienne tete
+
+	//On paramètre la nouvelle tete en fonction de l'action : la nouvelle tete correspond aux coordonnées de la case vers laquelle on avanceS
+    switch (a){
+        case up:
+            new_bout->queue_row+=1;
+        break;
+
+        case down:
+            new_bout->queue_row-=1;
+        break;
+
+        case right:
+            new_bout->queue_col+=1;
+        break;
+
+        case left:
+            new_bout->queue_col-=1;
+        break;
+
+        default:
+        break;
+    }
+
+    queue->elem=new_bout;
+    queue->next=queue_queue;
+
+    //Jusqu'ici on a fait la meme chose que dans eat_a_fruit, il faut désormais supprimer le dernier élement de la liste sur seprent
+
+    struct queue *init=malloc(sizeof(struct queue)); //Création de la liste qui va stocker la tete de la nouvelle liste pendant qu'on parcourt la queue jusqu'au dernier élement
+    
+
+    free(queue_queue);
 }

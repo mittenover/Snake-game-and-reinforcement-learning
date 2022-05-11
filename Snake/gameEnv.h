@@ -8,6 +8,7 @@
 char** grid;
 struct queue *queue;
 struct ffruit *nfruit;
+int size_snake;
 int** visited;
 int dim;
 int start_row;
@@ -68,6 +69,8 @@ void new_fruit();
 void init_snake();
 
 void eat_a_fruit();
+
+void n_eat_a_fruit(action a);
 
 
 #endif
