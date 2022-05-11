@@ -12,6 +12,7 @@ int main(int argc, char const *argv[])
 	}
 
 	srand(time(0));
+	nfruit=malloc(sizeof(struct ffruit)); //Allocation dynamique du fruit (variable globale), on le désalloue à la fin du main
 
 	dim=17;
 	start_col=5;
@@ -24,11 +25,13 @@ int main(int argc, char const *argv[])
 	init_snake();
 	grid_render();
 	
+	
 	while(queue != NULL)
 	{
 		free(queue->elem);
 		queue = queue->next;
 	}
 	free(queue);
+	free(nfruit);
 	return 0;
 }
