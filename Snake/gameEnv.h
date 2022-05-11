@@ -7,6 +7,7 @@
 
 char** grid;
 struct queue *queue;
+struct ffruit *nfruit;
 int** visited;
 int dim;
 int start_row;
@@ -51,6 +52,11 @@ struct queue{     //Structure de liste représentant le serpent
     struct queue *next;
 };
 
+struct ffruit{  //Création de la structure de fruit qui correspond à ses coordonnées
+    int f_col;
+    int f_row;
+};
+
 void alloc_grid();
 
 void grid_make();
@@ -61,7 +67,7 @@ void new_fruit();
 
 void init_snake();
 
-void eat_a_fruit(action a);
+void eat_a_fruit();
 
 
 #endif

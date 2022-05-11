@@ -57,6 +57,8 @@ void new_fruit(){
 		k+=1;
 	}
 	grid[i][j]='f';
+	nfruit->f_row=i;
+	nfruit->f_col=j;
 
 }
 
@@ -91,40 +93,20 @@ void init_snake(){  //Création du serpent initial qui occupe 3 cases
 	}
 }
 
-void eat_a_fruit(action a){ //Cette fonction applique la transformation sur le serpent lorsqu'il mange un fruit à la suite de l'action a
+void eat_a_fruit(){ //Cette fonction applique la transformation sur le serpent lorsqu'il mange un fruit à la suite de l'action a
 	
 	struct queue *queue_queue=malloc(sizeof(struct queue));  //Création de la queue (temporaire) qu'on va rajouter à la suite de la nouvelle tete qui prend la place du fruit
 	queue_queue=queue;
 
 	struct bout_queue *new_bout=malloc(sizeof(struct bout_queue)); //Création (permanente) des coordonnées de la nouvelle tete
 
-	//Modification de la tete du serpent qui prend la place du fruit
-    switch (a){
-        case up:
-            new_bout->queue_row+=1;
-        break;
 
-        case down:
-            new_bout->queue_row-=1;
+	//La nouvelle tete du serpent prend la position du fruit en cours
+	new_bout->queue_col=nfruit->f_col;  
+	new_bout->queue_row=nfruit->f_row;
 
-        break;
-
-        case right:
-            new_bout->queue_col+=1;
-
-        break;
-
-        case left:
-            new_bout->queue_col-=1;
-        break;
-
-        default:
-        break;
-
-        queue->elem=new_bout; //On remplace la tete du seprent par la nouvelle tete
-        queue->next=queue_queue; //La nouvelle queue du serpent correspond à l'ancien serpent en entier
-
-    }
+	queue->elem=new_bout;
+	queue->next=queue_queue;
 
 
 
