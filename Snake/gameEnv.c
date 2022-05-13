@@ -155,6 +155,14 @@ void n_eat_a_fruit(action a){  //Cette fonction applique la transformation sur l
 
     struct queue *init=malloc(sizeof(struct queue)); //Création de la liste qui va stocker la tete de la nouvelle liste pendant qu'on parcourt la queue jusqu'au dernier élement
     
+    queue *courant=queue, *tempo;
+    courant=malloc(sizeof(struct queue));
+    while(courant->next!=NULL){
+    	tempo=courant;
+    	courant=courant->next;
+    }
+    tempo->next=courant->next;
+    free(courant);
 
     free(queue_queue);
 }
