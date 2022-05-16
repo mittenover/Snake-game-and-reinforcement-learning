@@ -1,7 +1,40 @@
 #include "functions.h"
 #include "gameEnv.h"
 #include "Qlearning.h"
+#include "string.h"
 #include <time.h>
+
+void test_snake()
+{
+	char entree[100] = "\n";
+	while(strcmp(entree, "q\n") != 0)
+	{
+		fgets(entree, 100, stdin);
+		if (strcmp(entree, "u\n") == 0)
+		{
+			n_eat_a_fruit(up);
+			grid_render();
+		}
+
+		if (strcmp(entree, "d\n") == 0)
+		{
+			n_eat_a_fruit(down);
+			grid_render();
+		}
+
+		if (strcmp(entree, "r\n") == 0)
+		{
+			n_eat_a_fruit(right);
+			grid_render();
+		}
+
+		if (strcmp(entree, "l\n") == 0)
+		{
+			n_eat_a_fruit(left);
+			grid_render();
+		}
+	}
+}
 
 int main(int argc, char const *argv[])
 {
@@ -24,16 +57,7 @@ int main(int argc, char const *argv[])
 	new_fruit();
 	init_snake();
 	grid_render();
-	n_eat_a_fruit(up);
-	grid_render();
-	n_eat_a_fruit(right);
-	grid_render();
-	n_eat_a_fruit(down);
-	grid_render();
-	n_eat_a_fruit(up);
-	grid_render();
-	n_eat_a_fruit(left);
-	grid_render();
+	test_snake();
 	
 	while(queue != NULL)
 	{
