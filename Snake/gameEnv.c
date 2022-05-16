@@ -37,6 +37,7 @@ void actualize_terrain(){
 			}
 			else if (grid[i][j] == 'f')
 			{
+				// printf("The fruit is in (%d, %d)\n", i, j);
 				grid_terrain[i][j] = fruit;
 			}
 			else {grid_terrain[i][j] = blank;}
@@ -81,6 +82,8 @@ void grid_actualize(){
 	}
 
 	struct queue *q = queue;
+	state_row = queue->elem->queue_row;
+	state_col = queue->elem->queue_col;
 	while (q != NULL)
 	{
 		grid[q->elem->queue_row][q->elem->queue_col] = '.';
@@ -300,7 +303,7 @@ void taille_queue(struct queue *q)
 }
 
 
-// True if there is a fruit ahead
+// True is there is a fruit ahead
 bool is_a_fruit_ahead(action a){
 
 	// Pour l'instant regarde sur le tableau grid_terrain
@@ -337,7 +340,7 @@ bool is_a_fruit_ahead(action a){
         break;
 
         case left:
-        for (int i = 0; i < start_col; ++i)
+        for (int i = state_col; i > 0; i--)
             {
             	if (grid_terrain[state_row][i] == fruit)
             	{
