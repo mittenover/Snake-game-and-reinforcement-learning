@@ -173,13 +173,16 @@ void eat_a_fruit(){ //Cette fonction applique la transformation sur le serpent l
 
 	queue = queue_queue;
 
-	size_snake+=1; //LOrsque l'on mange un fruit la taille du serpent augmente de 1
+	size_snake+=1; //Lorsque l'on mange un fruit la taille du serpent augmente de 1
 
-    // Actualisation du fruit dans la grille
-    grid_actualize();
+	// Actualisation du serpent dans la grille
+	grid_actualize();
 
     // Génération d'un nouveau fruit
     new_fruit();
+
+    // Actualisation du fruit dans la grille
+    grid_actualize();
 
 }
 
@@ -202,7 +205,7 @@ struct queue* delete_last(struct queue* I)
 	return I;	
 }
 
-void n_eat_a_fruit(action a){  //Cette fonction applique la transformation sur le seprent lorsqu'il avance sans manger un fruit, à priori on est obligé de prendre l'action a en argument
+bool n_eat_a_fruit(action a){  //Cette fonction applique la transformation sur le seprent lorsqu'il avance sans manger un fruit, à priori on est obligé de prendre l'action a en argument
 	struct queue *queue_queue=malloc(sizeof(struct queue));  //Création de la queue (temporaire) qu'on va rajouter à la suite de la nouvelle tete qui prend la place du fruit
 
 	struct bout_queue *new_bout=malloc(sizeof(struct bout_queue)); //Création (permanente) des coordonnées de la nouvelle tete
@@ -210,21 +213,37 @@ void n_eat_a_fruit(action a){  //Cette fonction applique la transformation sur l
 	//On paramètre la nouvelle tete en fonction de l'action : la nouvelle tete correspond aux coordonnées de la case vers laquelle on avance
     switch (a){
         case up:
+        	if (grid_terrain[queue->elem->queue_row-1][queue->elem->queue_col] == wall || grid_terrain[queue->elem->queue_row-1][queue->elem->queue_col] == snake)
+        	{
+        		return false;
+        	}
             new_bout->queue_row = queue->elem->queue_row-1;
             new_bout->queue_col = queue->elem->queue_col;
         break;
 
         case down:
+        	if (grid_terrain[queue->elem->queue_row+1][queue->elem->queue_col] == wall || grid_terrain[queue->elem->queue_row+1][queue->elem->queue_col] == snake)
+        	{
+        		return false;
+        	}
             new_bout->queue_row = queue->elem->queue_row+1;
             new_bout->queue_col = queue->elem->queue_col;
         break;
 
         case right:
+        	if (grid_terrain[queue->elem->queue_row][queue->elem->queue_col+1] == wall || grid_terrain[queue->elem->queue_row][queue->elem->queue_col+1] == snake)
+        	{
+        		return false;
+        	}
             new_bout->queue_row = queue->elem->queue_row;
             new_bout->queue_col = queue->elem->queue_col+1;
         break;
 
         case left:
+        	if (grid_terrain[queue->elem->queue_row][queue->elem->queue_col-1] == wall || grid_terrain[queue->elem->queue_row][queue->elem->queue_col-1] == snake)
+        	{
+        		return false;
+        	}
             new_bout->queue_row = queue->elem->queue_row;
             new_bout->queue_col = queue->elem->queue_col-1;
         break;
@@ -243,48 +262,55 @@ void n_eat_a_fruit(action a){  //Cette fonction applique la transformation sur l
     queue=delete_last(queue);
     
     // Actualisation du serpent dans la grille
-    grid_actualize();	
-    
+    grid_actualize();
+
+    // Tout s'est bien passé 
+    return true;    
 }
 
 
 // Avance le serpent
-void step_foward(action a)
+bool step_foward(action a)
 {
 	switch (a){
         case up:
             if (grid[queue->elem->queue_row-1][queue->elem->queue_col] == 'f')
             {
             	eat_a_fruit(a);
+            	return true;
             }
-            else {n_eat_a_fruit(a);}
+            else {return n_eat_a_fruit(a);}
         break;
 
         case down:
             if (grid[queue->elem->queue_row+1][queue->elem->queue_col] == 'f')
             {
             	eat_a_fruit(a);
+            	return true;
             }
-            else {n_eat_a_fruit(a);}
+            else {return n_eat_a_fruit(a);}
         break;
 
         case right:
             if (grid[queue->elem->queue_row][queue->elem->queue_col+1] == 'f')
             {
             	eat_a_fruit(a);
+            	return true;
             }
-            else {n_eat_a_fruit(a);}
+            else {return n_eat_a_fruit(a);}
         break;
 
         case left:
             if (grid[queue->elem->queue_row][queue->elem->queue_col-1] == 'f')
             {
             	eat_a_fruit(a);
+            	return true;
             }
-            else {n_eat_a_fruit(a);}
+            else {return n_eat_a_fruit(a);}
         break;
 
         default:
+        	return false;
         break;
     }
 }	

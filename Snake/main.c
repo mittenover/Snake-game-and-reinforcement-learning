@@ -16,25 +16,41 @@ void test_snake()
 		fgets(entree, 100, stdin);
 		if (strcmp(entree, "u\n") == 0)
 		{
-			step_foward(up);
+			if (!step_foward(up))
+			{
+				printf("Game over !\n");
+				break;
+			}
 			grid_render();
 		}
 
 		if (strcmp(entree, "d\n") == 0)
 		{
-			step_foward(down);
-			grid_render();
-		}
-
-		if (strcmp(entree, "r\n") == 0)
-		{
-			step_foward(right);
+			if (!step_foward(down))
+			{
+				printf("Game over !\n");
+				break;
+			}
 			grid_render();
 		}
 
 		if (strcmp(entree, "l\n") == 0)
 		{
-			step_foward(left);
+			if (!step_foward(left))
+			{
+				printf("Game over !\n");
+				break;
+			}
+			grid_render();
+		}
+
+		if (strcmp(entree, "r\n") == 0)
+		{
+			if (!step_foward(right))
+			{
+				printf("Game over !\n");
+				break;
+			}
 			grid_render();
 		}
 
@@ -66,6 +82,8 @@ int main(int argc, char const *argv[])
 	grid_render();
 	test_snake();
 	
+
+	printf("Le jeu s'est arrêté correctement.\n");
 	while(queue != NULL)
 	{
 		free(queue->elem);

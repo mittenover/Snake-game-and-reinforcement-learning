@@ -81,9 +81,9 @@ struct queue* delete_last(struct queue* I);
 
 void eat_a_fruit();
 
-void n_eat_a_fruit(action a);
+bool n_eat_a_fruit(action a);
 
-void step_foward(action a);
+bool step_foward(action a);
 
 void taille_queue(struct queue *q);
 
