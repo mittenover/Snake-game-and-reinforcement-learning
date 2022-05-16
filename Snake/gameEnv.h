@@ -76,6 +76,8 @@ void eat_a_fruit();
 
 void n_eat_a_fruit(action a);
 
+void step_foward(action a);
+
 void taille_queue(struct queue *q);
 
 

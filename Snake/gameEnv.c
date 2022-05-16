@@ -32,6 +32,8 @@ void grid_make(){
 			}
 		}
 	}
+
+	new_fruit();
 }
 
 // Entre le serpent dans la grille
@@ -56,8 +58,6 @@ void grid_actualize(){
 }
 
 void grid_render(){
-
-	grid_actualize();
 
     for (int i=0; i<dim; i++) {
         for (int j=0; j< dim; j++){
@@ -119,35 +119,34 @@ void init_snake(){  //Création du serpent initial qui occupe 3 cases
 		grid[q->elem->queue_row][q->elem->queue_col] = '.';
 		q = q->next;
 	}
-	
-
-	// for(int i=0;i<3;++i){
-		
-	// 	grid[start_row][start_col-i]='.';
-	// }
 }
 
 void eat_a_fruit(){ //Cette fonction applique la transformation sur le serpent lorsqu'il mange un fruit
 	
+	printf("eat_a_fruit\n");
+	taille_queue(queue);
+
 	struct queue *queue_queue=malloc(sizeof(struct queue));  //Création de la queue (temporaire) qu'on va rajouter à la suite de la nouvelle tete qui prend la place du fruit
-	queue_queue=queue;
 
 	struct bout_queue *new_bout=malloc(sizeof(struct bout_queue)); //Création (permanente) des coordonnées de la nouvelle tete
-
 
 	//La nouvelle tete du serpent prend la position du fruit en cours
 	new_bout->queue_col=nfruit->f_col;  
 	new_bout->queue_row=nfruit->f_row;
 
-	queue->elem=new_bout;
-	queue->next=queue_queue;
+
+	queue_queue->elem=new_bout;
+	queue_queue->next=queue;
+
+	queue = queue_queue;
 
 	size_snake+=1; //LOrsque l'on mange un fruit la taille du serpent augmente de 1
 
+    // Actualisation du fruit dans la grille
+    grid_actualize();
 
-
-
-    free(queue_queue);
+    // Génération d'un nouveau fruit
+    new_fruit();
 
 }
 
@@ -209,9 +208,54 @@ void n_eat_a_fruit(action a){  //Cette fonction applique la transformation sur l
    	struct queue *q = queue;
 
     queue=delete_last(queue);
-    taille_queue(queue);	
+    
+    // Actualisation du serpent dans la grille
+    grid_actualize();	
     
 }
+
+
+// Avance le serpent
+void step_foward(action a)
+{
+	switch (a){
+        case up:
+            if (grid[queue->elem->queue_row-1][queue->elem->queue_col] == 'f')
+            {
+            	eat_a_fruit(a);
+            }
+            else {n_eat_a_fruit(a);}
+        break;
+
+        case down:
+            if (grid[queue->elem->queue_row+1][queue->elem->queue_col] == 'f')
+            {
+            	eat_a_fruit(a);
+            }
+            else {n_eat_a_fruit(a);}
+        break;
+
+        case right:
+            if (grid[queue->elem->queue_row][queue->elem->queue_col+1] == 'f')
+            {
+            	eat_a_fruit(a);
+            }
+            else {n_eat_a_fruit(a);}
+        break;
+
+        case left:
+            if (grid[queue->elem->queue_row][queue->elem->queue_col-1] == 'f')
+            {
+            	eat_a_fruit(a);
+            }
+            else {n_eat_a_fruit(a);}
+        break;
+
+        default:
+        break;
+    }
+}	
+
 
 // Vérifie la taille du serpent : correspond au score
 void taille_queue(struct queue *q)
