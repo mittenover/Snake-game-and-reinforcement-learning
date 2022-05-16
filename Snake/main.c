@@ -26,9 +26,9 @@ int main(int argc, char const *argv[])
 	grid_render();
 	n_eat_a_fruit(up);
 	grid_render();
-	n_eat_a_fruit(up);
+	n_eat_a_fruit(right);
 	grid_render();
-	n_eat_a_fruit(up);
+	n_eat_a_fruit(down);
 	grid_render();
 	n_eat_a_fruit(up);
 	grid_render();

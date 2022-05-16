@@ -62,16 +62,21 @@ void alloc_grid();
 
 void grid_make();
 
+void grid_actualize();
+
 void grid_render(); 
 
 void new_fruit();
 
 void init_snake();
+
 struct queue* delete_last(struct queue* I);
 
 void eat_a_fruit();
 
 void n_eat_a_fruit(action a);
+
+void taille_queue(struct queue *q);
 
 
 #endif

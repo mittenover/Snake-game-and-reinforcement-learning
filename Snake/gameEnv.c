@@ -32,17 +32,40 @@ void grid_make(){
 			}
 		}
 	}
+}
 
+// Entre le serpent dans la grille
+void grid_actualize(){
+	for (int i = 0; i < dim; ++i)
+	{
+		for (int j = 0; j < dim; ++j)
+		{
+			if (grid[i][j] != '+' && grid[i][j] != 'f')
+			{
+				grid[i][j] = ' ';
+			}
+		}
+	}
+
+	struct queue *q = queue;
+	while (q != NULL)
+	{
+		grid[q->elem->queue_row][q->elem->queue_col] = '.';
+		q = q->next;
+	}
 }
 
 void grid_render(){
-     for (int i=0; i<dim; i++) {
-         for (int j=0; j< dim; j++){
-             printf("%c ", grid[i][j]);
-         }
-         printf("\n");
-     }
-     printf("\n");
+
+	grid_actualize();
+
+    for (int i=0; i<dim; i++) {
+        for (int j=0; j< dim; j++){
+            printf("%c ", grid[i][j]);
+        }
+        printf("\n");
+    }
+    printf("\n");
 
 }
 
@@ -78,21 +101,30 @@ void init_snake(){  //Création du serpent initial qui occupe 3 cases
 	struct queue *next_1 = malloc(sizeof(struct queue));
 	struct bout_queue *b1 = malloc(sizeof(struct bout_queue));
 	b1->queue_col=start_col-1;
-	b1->queue_row=start_row-1;
+	b1->queue_row=start_row;
 	next_1->elem=b1;
 
 	struct queue *next_2 = malloc(sizeof(struct queue));
 	struct bout_queue *b2 = malloc(sizeof(struct bout_queue));
 	b2->queue_col=start_col-2;
-	b2->queue_row=start_row-2;
+	b2->queue_row=start_row;
 	next_2->elem=b2;
 
 	next_1->next = next_2;
 	queue->next = next_1;
-	for(int i=0;i<3;++i){
-		
-		grid[start_row][start_col-i]='.';
+
+	struct queue *q = queue;
+	while (q != NULL)
+	{
+		grid[q->elem->queue_row][q->elem->queue_col] = '.';
+		q = q->next;
 	}
+	
+
+	// for(int i=0;i<3;++i){
+		
+	// 	grid[start_row][start_col-i]='.';
+	// }
 }
 
 void eat_a_fruit(){ //Cette fonction applique la transformation sur le serpent lorsqu'il mange un fruit
@@ -124,20 +156,18 @@ struct queue* delete_last(struct queue* I)
 	struct queue* p=I;
 	struct queue* l=NULL;
 	struct queue* t=NULL;
+
 	while(p->next->next!=NULL)
 	{
-	p=p->next;
+		p=p->next;
 	}
-	// Grid
-	printf("%d, %d\n", p->elem->queue_row, p->elem->queue_row);
-	grid[p->elem->queue_row][p->elem->queue_row] = ' ';
+
 	l=p;
 	t=p->next;
 	l->next=NULL;
 	free(t);
  
- 
-return I;	
+	return I;	
 }
 
 void n_eat_a_fruit(action a){  //Cette fonction applique la transformation sur le seprent lorsqu'il avance sans manger un fruit, à priori on est obligé de prendre l'action a en argument
@@ -150,29 +180,21 @@ void n_eat_a_fruit(action a){  //Cette fonction applique la transformation sur l
         case up:
             new_bout->queue_row = queue->elem->queue_row-1;
             new_bout->queue_col = queue->elem->queue_col;
-            // Grille
-            grid[new_bout->queue_row][new_bout->queue_col] = '.';
         break;
 
         case down:
             new_bout->queue_row = queue->elem->queue_row+1;
             new_bout->queue_col = queue->elem->queue_col;
-            // Grille
-            grid[new_bout->queue_row][new_bout->queue_col] = '.';
         break;
 
         case right:
             new_bout->queue_row = queue->elem->queue_row;
             new_bout->queue_col = queue->elem->queue_col+1;
-            // Grille
-            grid[new_bout->queue_row][new_bout->queue_col] = '.';
         break;
 
         case left:
             new_bout->queue_row = queue->elem->queue_row;
             new_bout->queue_col = queue->elem->queue_col-1;
-            // Grille
-            grid[new_bout->queue_row][new_bout->queue_col] = '.';
         break;
 
         default:
@@ -182,17 +204,25 @@ void n_eat_a_fruit(action a){  //Cette fonction applique la transformation sur l
    	queue_queue->elem = new_bout;
    	queue_queue->next = queue;
    	queue = queue_queue;
-    //Jusqu'ici on a fait la meme chose que dans eat_a_fruit, il faut désormais supprimer le dernier élement de la liste sur seprent
-    struct queue *q = queue;
-    while(q->next != NULL){
-    	printf("OK\n");
-    	q = q->next;
-    }
-    grid[q->elem->queue_row][q->elem->queue_row] = '0';
-    printf("%d, %d\n", q->elem->queue_row, q->elem->queue_row);
-    free(q->next);
+    // //Jusqu'ici on a fait la meme chose que dans eat_a_fruit, il faut désormais supprimer le dernier élement de la liste sur seprent
+   	// On delete le bout de la queue
+   	struct queue *q = queue;
 
-
-    // queue=delete_last(queue);	
+    queue=delete_last(queue);
+    taille_queue(queue);	
     
+}
+
+// Vérifie la taille du serpent : correspond au score
+void taille_queue(struct queue *q)
+{
+	int n=1;
+	struct queue *p = queue;
+	while(p->next != NULL)
+	{
+		n++;
+		p = p->next;
+	}
+	printf("%d\n", n);
+	return;
 }
