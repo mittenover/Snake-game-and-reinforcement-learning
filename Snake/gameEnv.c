@@ -89,6 +89,8 @@ void grid_actualize(){
 		grid[q->elem->queue_row][q->elem->queue_col] = '.';
 		q = q->next;
 	}
+
+	actualize_terrain();
 }
 
 void grid_render(){
@@ -303,55 +305,51 @@ void taille_queue(struct queue *q)
 }
 
 
-// True is there is a fruit ahead
-bool is_a_fruit_ahead(action a){
+// 0 if no fruit, 1 if UP, 2 if DOWN, 3 if LEFT, 4 if RIGHT
+int is_a_fruit_ahead(){
 
 	// Pour l'instant regarde sur le tableau grid_terrain
 
-	switch (a){
-        case up:
-            for (int i = 0; i < state_row; ++i)
-            {
-            	if (grid_terrain[i][state_col] == fruit)
-            	{
-            		return true;
-            	}
-            }
-        break;
-
-        case down:
-            for (int i = state_row; i < dim; ++i)
-            {
-            	if (grid_terrain[i][state_col] == fruit)
-            	{
-            		return true;
-            	}
-            }
-        break;
-
-        case right:
-        for (int i = state_col; i < dim; ++i)
-            {
-            	if (grid_terrain[state_row][i] == fruit)
-            	{
-            		return true;
-            	}
-            }            
-        break;
-
-        case left:
-        for (int i = state_col; i > 0; i--)
-            {
-            	if (grid_terrain[state_row][i] == fruit)
-            	{
-            		return true;
-            	}
-            }
-        break;
-
-        default:
-        break;
+	// UP
+	for (int i = 0; i < state_row; ++i)
+    {
+     	if (grid_terrain[i][state_col] == fruit)
+          	{
+          		printf("The fruit is UP\n");
+         		return 1;
+          	}
     }
 
-    return false;
+    // DOWN
+    for (int i = state_row+1; i < dim; ++i)
+    {
+       	if (grid_terrain[i][state_col] == fruit)
+       	{
+       		printf("The fruit is DOWN\n");
+      		return 2;
+      	}
+    }
+
+    // LEFT
+    for (int i = state_col-1; i > 0; i--)
+    {
+           	if (grid_terrain[state_row][i] == fruit)
+           	{
+           		printf("The fruit is LEFT\n");
+           		return 3;
+           	}
+    }
+
+    // RIGHT
+    for (int i = state_col+1; i < dim; i++)
+    {
+           	if (grid_terrain[state_row][i] == fruit)
+           	{
+           		printf("The fruit is RIGHT\n");
+           		return 4;
+           	}
+    }
+
+    printf("There is no fruit ahead\n");
+    return 0;
 }

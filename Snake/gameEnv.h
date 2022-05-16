@@ -87,7 +87,7 @@ void step_foward(action a);
 
 void taille_queue(struct queue *q);
 
-bool is_a_fruit_ahead(action a);
+int is_a_fruit_ahead();
 
 
 #endif
