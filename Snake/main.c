@@ -24,11 +24,16 @@ int main(int argc, char const *argv[])
 	new_fruit();
 	init_snake();
 	grid_render();
-	printf("OK\n");
 	n_eat_a_fruit(up);
-	printf("OK\n");
 	grid_render();
-	printf("OK\n");
+	n_eat_a_fruit(up);
+	grid_render();
+	n_eat_a_fruit(up);
+	grid_render();
+	n_eat_a_fruit(up);
+	grid_render();
+	n_eat_a_fruit(left);
+	grid_render();
 	
 	while(queue != NULL)
 	{

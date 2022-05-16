@@ -128,6 +128,9 @@ struct queue* delete_last(struct queue* I)
 	{
 	p=p->next;
 	}
+	// Grid
+	printf("%d, %d\n", p->elem->queue_row, p->elem->queue_row);
+	grid[p->elem->queue_row][p->elem->queue_row] = ' ';
 	l=p;
 	t=p->next;
 	l->next=NULL;
@@ -139,37 +142,57 @@ return I;
 
 void n_eat_a_fruit(action a){  //Cette fonction applique la transformation sur le seprent lorsqu'il avance sans manger un fruit, à priori on est obligé de prendre l'action a en argument
 	struct queue *queue_queue=malloc(sizeof(struct queue));  //Création de la queue (temporaire) qu'on va rajouter à la suite de la nouvelle tete qui prend la place du fruit
-	queue_queue=queue;
 
 	struct bout_queue *new_bout=malloc(sizeof(struct bout_queue)); //Création (permanente) des coordonnées de la nouvelle tete
-	new_bout=queue->elem; //Avant l'action on on est au niveau de l'ancienne tete
-
+	
 	//On paramètre la nouvelle tete en fonction de l'action : la nouvelle tete correspond aux coordonnées de la case vers laquelle on avance
     switch (a){
         case up:
-            new_bout->queue_row++;
+            new_bout->queue_row = queue->elem->queue_row-1;
+            new_bout->queue_col = queue->elem->queue_col;
+            // Grille
+            grid[new_bout->queue_row][new_bout->queue_col] = '.';
         break;
 
         case down:
-            new_bout->queue_row--;
+            new_bout->queue_row = queue->elem->queue_row+1;
+            new_bout->queue_col = queue->elem->queue_col;
+            // Grille
+            grid[new_bout->queue_row][new_bout->queue_col] = '.';
         break;
 
         case right:
-            new_bout->queue_col++;
+            new_bout->queue_row = queue->elem->queue_row;
+            new_bout->queue_col = queue->elem->queue_col+1;
+            // Grille
+            grid[new_bout->queue_row][new_bout->queue_col] = '.';
         break;
 
         case left:
-            new_bout->queue_col--;
+            new_bout->queue_row = queue->elem->queue_row;
+            new_bout->queue_col = queue->elem->queue_col-1;
+            // Grille
+            grid[new_bout->queue_row][new_bout->queue_col] = '.';
         break;
 
         default:
         break;
     }
 
-    queue->elem=new_bout;
-    queue->next=queue_queue;
-    printf("OK\n");
+   	queue_queue->elem = new_bout;
+   	queue_queue->next = queue;
+   	queue = queue_queue;
     //Jusqu'ici on a fait la meme chose que dans eat_a_fruit, il faut désormais supprimer le dernier élement de la liste sur seprent
-    queue=delete_last(queue);	
+    struct queue *q = queue;
+    while(q->next != NULL){
+    	printf("OK\n");
+    	q = q->next;
+    }
+    grid[q->elem->queue_row][q->elem->queue_row] = '0';
+    printf("%d, %d\n", q->elem->queue_row, q->elem->queue_row);
+    free(q->next);
+
+
+    // queue=delete_last(queue);	
     
 }
