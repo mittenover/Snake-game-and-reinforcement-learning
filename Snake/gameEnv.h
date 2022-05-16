@@ -6,6 +6,7 @@
 
 
 char** grid;
+enum terrain** grid_terrain;
 struct queue *queue;
 struct ffruit *nfruit;
 int size_snake;
@@ -21,7 +22,8 @@ int goal_col;
 enum terrain{
     wall,
     fruit,
-    snake
+    snake,
+    blank
 };
 
 enum action{
@@ -59,6 +61,10 @@ struct ffruit{  //Création de la structure de fruit qui correspond à ses coord
 };
 
 void alloc_grid();
+
+void alloc_grid_terrain();
+
+void actualize_terrain();
 
 void grid_make();
 

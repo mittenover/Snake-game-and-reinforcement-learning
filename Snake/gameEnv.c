@@ -14,6 +14,36 @@ void alloc_grid(){  //On alloue dynamiquement un tableau carré de caractère de
      }
 }
 
+void alloc_grid_terrain(){
+	grid_terrain = malloc(dim * sizeof(enum terrain*));
+
+     for(int i=0; i<dim; i++) {
+         grid_terrain[i] = malloc(dim * sizeof(enum terrain));
+     }
+}
+
+void actualize_terrain(){
+	for (int i = 0; i < dim; ++i)
+	{
+		for (int j = 0; j < dim; ++j)
+		{
+			if (grid[i][j] = '+')
+			{
+				grid_terrain[i][j] = wall;
+			}
+			else if (grid[i][j] = '.')
+			{
+				grid_terrain[i][j] = snake;
+			}
+			else if (grid[i][j] = 'f')
+			{
+				grid_terrain[i][j] = fruit;
+			}
+			else {grid_terrain[i][j] = blank;}
+		}
+	}
+}
+
 void grid_make(){
 	for(int i=0;i<dim;++i){
 		grid[i][0]='+';
@@ -74,7 +104,7 @@ void new_fruit(){
 	int i=rand()%(dim-2) + 1;
 	int j=rand()%(dim-2) + 1;
 	int k=0;
-	while((grid[i][j]==wall)||(grid[i][j]==snake)||(k<100*dim*dim)){  //on tire des positions aléatoire dans la grille, si cette position correspond à un mur on retire jusqu'à avoir une position vide. Le compteur k permet de mettre une limite sur les tirages au cas où à la fun du jeu plus aucune position ne peut accueillir de fruit
+	while((grid[i][j]=='+')||(grid[i][j]=='.')||(k<100*dim*dim)){  //on tire des positions aléatoire dans la grille, si cette position correspond à un mur on retire jusqu'à avoir une position vide. Le compteur k permet de mettre une limite sur les tirages au cas où à la fun du jeu plus aucune position ne peut accueillir de fruit
 		i=rand()%(dim-2) + 1;
 		j=rand()%(dim-2) + 1;
 		k+=1;
