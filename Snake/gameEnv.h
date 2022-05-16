@@ -67,6 +67,7 @@ void grid_render();
 void new_fruit();
 
 void init_snake();
+struct queue* delete_last(struct queue* I);
 
 void eat_a_fruit();
 

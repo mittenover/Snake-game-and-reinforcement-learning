@@ -119,29 +119,47 @@ void eat_a_fruit(){ //Cette fonction applique la transformation sur le serpent l
 
 }
 
+struct queue* delete_last(struct queue* I)
+{
+	struct queue* p=I;
+	struct queue* l=NULL;
+	struct queue* t=NULL;
+	while(p->next->next!=NULL)
+	{
+	p=p->next;
+	}
+	l=p;
+	t=p->next;
+	l->next=NULL;
+	free(t);
+ 
+ 
+return I;	
+}
+
 void n_eat_a_fruit(action a){  //Cette fonction applique la transformation sur le seprent lorsqu'il avance sans manger un fruit, à priori on est obligé de prendre l'action a en argument
 	struct queue *queue_queue=malloc(sizeof(struct queue));  //Création de la queue (temporaire) qu'on va rajouter à la suite de la nouvelle tete qui prend la place du fruit
 	queue_queue=queue;
 
 	struct bout_queue *new_bout=malloc(sizeof(struct bout_queue)); //Création (permanente) des coordonnées de la nouvelle tete
-	new_bout=queue->elem; //Avant l'aciton on est au niveau de l'ancienne tete
+	new_bout=queue->elem; //Avant l'action on on est au niveau de l'ancienne tete
 
 	//On paramètre la nouvelle tete en fonction de l'action : la nouvelle tete correspond aux coordonnées de la case vers laquelle on avance
     switch (a){
         case up:
-            new_bout->queue_row+=1;
+            new_bout->queue_row++;
         break;
 
         case down:
-            new_bout->queue_row-=1;
+            new_bout->queue_row--;
         break;
 
         case right:
-            new_bout->queue_col+=1;
+            new_bout->queue_col++;
         break;
 
         case left:
-            new_bout->queue_col-=1;
+            new_bout->queue_col--;
         break;
 
         default:
@@ -150,18 +168,8 @@ void n_eat_a_fruit(action a){  //Cette fonction applique la transformation sur l
 
     queue->elem=new_bout;
     queue->next=queue_queue;
-
+    printf("OK\n");
     //Jusqu'ici on a fait la meme chose que dans eat_a_fruit, il faut désormais supprimer le dernier élement de la liste sur seprent
-    struct queue *p=queue;
-	struct queue *l=NULL;
-	struct queue *t=NULL;
-	while(p->next->next!=NULL)
-	{
-	p=p->next;
-	}
-	l=p;
-	t=p->next;
-	l->next=NULL;
-	
+    queue=delete_last(queue);	
     
 }
