@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 
 char** grid;
@@ -85,6 +86,8 @@ void n_eat_a_fruit(action a);
 void step_foward(action a);
 
 void taille_queue(struct queue *q);
+
+bool is_a_fruit_ahead(action a);
 
 
 #endif

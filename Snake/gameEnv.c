@@ -27,15 +27,15 @@ void actualize_terrain(){
 	{
 		for (int j = 0; j < dim; ++j)
 		{
-			if (grid[i][j] = '+')
+			if (grid[i][j] == '+')
 			{
 				grid_terrain[i][j] = wall;
 			}
-			else if (grid[i][j] = '.')
+			else if (grid[i][j] == '.')
 			{
 				grid_terrain[i][j] = snake;
 			}
-			else if (grid[i][j] = 'f')
+			else if (grid[i][j] == 'f')
 			{
 				grid_terrain[i][j] = fruit;
 			}
@@ -43,6 +43,7 @@ void actualize_terrain(){
 		}
 	}
 }
+
 
 void grid_make(){
 	for(int i=0;i<dim;++i){
@@ -152,9 +153,6 @@ void init_snake(){  //Création du serpent initial qui occupe 3 cases
 }
 
 void eat_a_fruit(){ //Cette fonction applique la transformation sur le serpent lorsqu'il mange un fruit
-	
-	printf("eat_a_fruit\n");
-	taille_queue(queue);
 
 	struct queue *queue_queue=malloc(sizeof(struct queue));  //Création de la queue (temporaire) qu'on va rajouter à la suite de la nouvelle tete qui prend la place du fruit
 
@@ -299,4 +297,58 @@ void taille_queue(struct queue *q)
 	}
 	printf("%d\n", n);
 	return;
+}
+
+
+// True if there is a fruit ahead
+bool is_a_fruit_ahead(action a){
+
+	// Pour l'instant regarde sur le tableau grid_terrain
+
+	switch (a){
+        case up:
+            for (int i = 0; i < state_row; ++i)
+            {
+            	if (grid_terrain[i][state_col] == fruit)
+            	{
+            		return true;
+            	}
+            }
+        break;
+
+        case down:
+            for (int i = state_row; i < dim; ++i)
+            {
+            	if (grid_terrain[i][state_col] == fruit)
+            	{
+            		return true;
+            	}
+            }
+        break;
+
+        case right:
+        for (int i = state_col; i < dim; ++i)
+            {
+            	if (grid_terrain[state_row][i] == fruit)
+            	{
+            		return true;
+            	}
+            }            
+        break;
+
+        case left:
+        for (int i = 0; i < start_col; ++i)
+            {
+            	if (grid_terrain[state_row][i] == fruit)
+            	{
+            		return true;
+            	}
+            }
+        break;
+
+        default:
+        break;
+    }
+
+    return false;
 }
