@@ -126,7 +126,7 @@ void n_eat_a_fruit(action a){  //Cette fonction applique la transformation sur l
 	struct bout_queue *new_bout=malloc(sizeof(struct bout_queue)); //Création (permanente) des coordonnées de la nouvelle tete
 	new_bout=queue->elem; //Avant l'aciton on est au niveau de l'ancienne tete
 
-	//On paramètre la nouvelle tete en fonction de l'action : la nouvelle tete correspond aux coordonnées de la case vers laquelle on avanceS
+	//On paramètre la nouvelle tete en fonction de l'action : la nouvelle tete correspond aux coordonnées de la case vers laquelle on avance
     switch (a){
         case up:
             new_bout->queue_row+=1;
@@ -152,17 +152,16 @@ void n_eat_a_fruit(action a){  //Cette fonction applique la transformation sur l
     queue->next=queue_queue;
 
     //Jusqu'ici on a fait la meme chose que dans eat_a_fruit, il faut désormais supprimer le dernier élement de la liste sur seprent
-
-    struct queue *init=malloc(sizeof(struct queue)); //Création de la liste qui va stocker la tete de la nouvelle liste pendant qu'on parcourt la queue jusqu'au dernier élement
+    struct queue *p=queue;
+	struct queue *l=NULL;
+	struct queue *t=NULL;
+	while(p->next->next!=NULL)
+	{
+	p=p->next;
+	}
+	l=p;
+	t=p->next;
+	l->next=NULL;
+	
     
-    queue *courant=queue, *tempo;
-    courant=malloc(sizeof(struct queue));
-    while(courant->next!=NULL){
-    	tempo=courant;
-    	courant=courant->next;
-    }
-    tempo->next=courant->next;
-    free(courant);
-
-    free(queue_queue);
 }
