@@ -173,11 +173,13 @@ void one_learning(){
 	maze_reset();
 	s = start_row*cols + start_col; // Etat initial
 
-	while(s != goal_row*cols + goal_col)
+	int compteur = 0; // Vérifie qu'il ne fait pas trop de boucles
+
+	while(s != goal_row*cols + goal_col && compteur<1000) 
 		{
 
 			// Choix de l'action: (POUR L'INSTANT ON LA PREND ALEATOIRE)
-			a = env_action_boltzmann(s);
+			a = env_action_sample(s);
 			a_nb = action_to_int(a);
 
 			state = maze_step(a);
@@ -194,6 +196,8 @@ void one_learning(){
 			state_col = state.new_col;
 			s = future_s;
 			// visited[state_row][start_col] = unknown;
+
+			compteur++;
 		}
 }
 
@@ -225,7 +229,9 @@ void one_learning_sarsa(){
 	a = env_action_greedy();
 	a_nb = action_to_int(a);
 
-	while(s != goal_row*cols + goal_col)
+	int compteur = 0; // Vérifie qu'il ne fait pas trop de boucles
+
+	while(s != goal_row*cols + goal_col && compteur<1000)
 		{
 			state = maze_step(a);
 
@@ -256,6 +262,8 @@ void one_learning_sarsa(){
 			a = a2;
 			a_nb = action_to_int(a);
 			// visited[state_row][start_col] = unknown;
+
+			compteur++;
 		}
 }
 
