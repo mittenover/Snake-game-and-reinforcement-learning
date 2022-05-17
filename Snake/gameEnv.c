@@ -270,14 +270,14 @@ bool n_eat_a_fruit(action a){  //Cette fonction applique la transformation sur l
 
 
 // Avance le serpent
-bool step_foward(action a)
+int step_foward(action a)
 {
 	switch (a){
         case up:
             if (grid[queue->elem->queue_row-1][queue->elem->queue_col] == 'f')
             {
             	eat_a_fruit(a);
-            	return true;
+            	return 0;
             }
             else {return n_eat_a_fruit(a);}
         break;
@@ -434,4 +434,13 @@ int is_a_obstacle_left(){
 
    
     return 0;
+}
+
+envOutput game_step(action a){
+   	int end=1;
+    envOutput stepOut;
+
+    //Pour chaque situation on applique des récompenses en fonction de l'environnement autour (est-ce qu'on a mangé un fruit ? est ce qu'il ya un obstacle au loin ? Est ce qu'il y a un fruit au loin ?)
+
+ 	//On utilise de variable locale dans 
 }

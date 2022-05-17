@@ -38,10 +38,8 @@ enum action{
 typedef enum action action ;
 
 struct envOutput{
-  int new_col;
-  int new_row;
   int reward;
-  int done;
+  bool end;  //=0 si perdu 1 sinon
 };
 
 
@@ -83,7 +81,7 @@ void eat_a_fruit();
 
 bool n_eat_a_fruit(action a);
 
-bool step_foward(action a);
+int step_foward(action a);
 
 void taille_queue(struct queue *q);
 
