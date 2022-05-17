@@ -39,6 +39,31 @@ double****** alloc_table_reward()
 	return table_reward;
 }
 
+// Renvoie la valeur maximale du tableau Q en balayant les actions de l'état futur
+// Remarque : l'état futur correspond à l'état global, puisque celui-ci vient d'être actualisé par game_step
+double max_future_state()
+{
+	// Distances des obstacles dans chaque directions
+	int d_u;
+	int d_d;
+	int d_l;
+	int d_r;
+
+	// Présence d'un fruit et dans quelle direction
+	int f_ahead;
+
+	double max = table_reward[d_u][d_d][d_l][d_r][f_ahead][0];
+	for (int i = 1; i < 4; ++i)
+	{
+		if ( max < table_reward[d_u][d_d][d_l][d_r][f_ahead][i])
+		{
+			max = table_reward[d_u][d_d][d_l][d_r][f_ahead][0];
+		}
+	}
+
+	return max;
+}
+
 
 void fill_table(double****** table_reward)
 {
@@ -61,7 +86,6 @@ void fill_table(double****** table_reward)
 			}
 		}
 	}
-
 	return;
 }
 
@@ -78,14 +102,32 @@ double****** reset_table_reward(double****** table_reward)
 
 
 // Effectue une boucle d'apprentissage: part de l'état initial, va jusqu'à l'état final ou s'arrête au bout d'un certain nombre d'itérations
-void one_learning(){
+bool one_learning(){
 
-	// Variables :
-	double r; // Variable correspondant à la récompense
-	enum action a;
-	struct envOutput state;
+	// VARIABLE :
+	double r; // Récompense
+	enum action a; // Action choisie
+	struct envOutput state; // Structure donnant les informations sur l'état après l'action dans l'environnement
+	
+	// Paramètre de l'algorithme de Qlearning
 	double g = 0.9;
 	alpha = 0.02;
+
+	// Distances des obstacles dans chaque directions
+	int d_u;
+	int d_d;
+	int d_l;
+	int d_r;
+
+	// Présence d'un fruit et dans quelle direction
+	int f_ahead;
+
+	// Action choisie
+	int a_nb;
+
+	// Score
+	int score;
+
 
 
 	// Initialisation
@@ -96,14 +138,26 @@ void one_learning(){
 			// Choix de l'action:
 			// a = env_action_sample(); // Attendre que la fonction soit définie dans gameEnv
 
-			// state = maze_step(a); // Attendre que la fonction soit définie dans gameEnv
+			// state = env_step(a); // Attendre que la fonction soit définie dans gameEnv
 
-			// Effectue l'action et en déduit une récompense, et la valeur de l'état futur :
-			r = state.reward;
+			// Lit la récompense
+			// r = state.reward;
 
-			state_row = state.new_row;
-			state_col = state.new_col;
-			// visited[state_row][start_col] = unknown;
+			// Actualisation des paramètres d'indices du tableau Q
+			d_u = is_a_obstacle_up();
+			d_l = is_a_obstacle_down();
+			d_l = is_a_obstacle_left();
+			d_r = is_obstacle_right();
+
+			f_ahead = is_a_fruit_ahead();
+
+			score = taille_queue();
+
+			max_futur_s = 0; // max_future_state();
+
+			// Actualisation du tableau Q
+			table_reward[d_u][d_d][d_l][d_r][f_ahead][a_nb] = table_reward[d_u][d_d][d_l][d_r][f_ahead][a_nb] + alpha*(r + g*max_future_s - table_reward[d_u][d_d][d_l][d_r][f_ahead][a_nb]);
+
 		}
 }
 
@@ -115,11 +169,7 @@ void learn(char *maze)
 	// En gros on reprend la structure du main mais on le boucle
 
 	// Initialisation du jeu
-	grid_make(dim);
-
-    printf("Dimension du tableau : %d x %d.\n", dim, dim);
-    grid_render();
-
+	
     // Initialisation du tableau Q
     table_reward = alloc_table_reward();
     fill_table(table_reward);
