@@ -89,5 +89,12 @@ void taille_queue(struct queue *q);
 
 int is_a_fruit_ahead();
 
+int is_a_obstacle_up();
+
+int is_a_obstacle_down();
+
+int is_a_obstacle_right();
+
+int is_a_obstacle_left();
 
 #endif

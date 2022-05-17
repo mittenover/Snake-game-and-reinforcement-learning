@@ -379,3 +379,59 @@ int is_a_fruit_ahead(){
     printf("There is no fruit ahead\n");
     return 0;
 }
+
+int is_a_obstacle_up(){
+
+	// Pour l'instant regarde sur le tableau grid_terrain
+
+	// UP
+	for (int i = state_row-1; i >=0; --i)
+    {
+     	if ((grid_terrain[i][state_col] == wall)||(grid_terrain[i][state_col] == snake))
+          	{
+         		return state_row-i-1;
+          	}
+    }
+
+   
+    return 0;
+}
+
+int is_a_obstacle_down(){
+	for (int i = state_row+1; i < dim; ++i)
+    {
+       	if ((grid_terrain[i][state_col] == wall)||(grid_terrain[i][state_col] == snake))
+       	{
+       		return(i-state_row-1);
+      	}
+    }
+    return 0;
+}
+
+int is_a_obstacle_right(){
+	for (int i = state_col+1; i < dim; i++)
+    {
+           	if ((grid_terrain[state_row][i] == wall)||(grid_terrain[state_row][i] == snake))
+           	{
+           		return(i-state_col-1);
+           	}
+    }
+return 0;
+}
+
+int is_a_obstacle_left(){
+
+	// Pour l'instant regarde sur le tableau grid_terrain
+
+	// UP
+	for (int i = state_col-1; i >=0; --i)
+    {
+     	if ((grid_terrain[state_row][i] == wall)||(grid_terrain[state_row][i] == snake))
+          	{
+         		return state_col-i-1;
+          	}
+    }
+
+   
+    return 0;
+}

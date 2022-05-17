@@ -55,6 +55,10 @@ void test_snake()
 		}
 
 		is_a_fruit_ahead();
+		printf("u:%d\n",is_a_obstacle_up());
+		printf("d:%d\n",is_a_obstacle_down());
+		printf("r:%d\n",is_a_obstacle_right());
+		printf("l:%d\n",is_a_obstacle_left());
 	}
 }
 
@@ -81,6 +85,7 @@ int main(int argc, char const *argv[])
 	init_snake();
 	grid_render();
 	test_snake();
+
 	
 
 	printf("Le jeu s'est arrêté correctement.\n");
