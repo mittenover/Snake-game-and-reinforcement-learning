@@ -12,12 +12,14 @@ double epsilon;
 
 double****** alloc_table_reward();
 
+double****** reset_table_reward(double****** table_reward);
+
 double max_future_state();
 
 void fill_table(double****** table_reward);
 
 void learn();
 
-bool one_learning();
+int one_learning();
 
 #endif

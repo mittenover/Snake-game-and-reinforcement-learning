@@ -5,28 +5,30 @@
 #include "Qlearning.h"
 #include "gameEnv.h"
 
+// Remarque: on prend la valeur 15 parce qu'on part du principe que la taille du jeu est (17x17)
+
 double****** alloc_table_reward()
 {
 	// On est obligé de créer 5 boucle pour créer un tableau de flottant à 5 dimensions
-	double****** table_reward = malloc(sizeof(double*****)*dim);
+	double****** table_reward = malloc(sizeof(double*****)*15);
 
-	for (int i = 0; i < dim; ++i)
+	for (int i = 0; i < 15; ++i)
 	{
 		table_reward[i] = malloc(sizeof(double****)*15);
 
-		for (int j = 0; j < dim; ++j)
+		for (int j = 0; j < 15; ++j)
 		{
 			table_reward[i][j] = malloc(sizeof(double***)*15);
 
-			for (int k = 0; k < dim; ++k)
+			for (int k = 0; k < 15; ++k)
 			{
 				table_reward[i][j][k] = malloc(sizeof(double**)*15);
 
-				for (int l = 0; l < dim; ++l)
+				for (int l = 0; l < 15; ++l)
 				{
 					table_reward[i][j][k][l] = malloc(sizeof(double*)*5);
 
-					for (int m = 0; m < 4; ++m)
+					for (int m = 0; m < 5; ++m)
 					{
 						
 						table_reward[i][j][k][l][m] = malloc(sizeof(double)*4);
@@ -64,16 +66,16 @@ double max_future_state()
 	return max;
 }
 
-
+// ERREUR DE SEGMENTATION
 void fill_table(double****** table_reward)
 {
-	for (int i = 0; i < dim; ++i)
+	for (int i = 0; i < 15; ++i)
 	{
-		for (int j = 0; j < dim; ++j)
+		for (int j = 0; j < 15; ++j)
 		{
-			for (int k = 0; k < dim; ++k)
+			for (int k = 0; k < 15; ++k)
 			{
-				for (int l = 0; l < dim; ++l)
+				for (int l = 0; l < 15; ++l)
 				{
 					for (int m = 0; m < 5; ++m)
 					{
@@ -89,6 +91,7 @@ void fill_table(double****** table_reward)
 	return;
 }
 
+
 // Enter the table reward you want to reset it gives you a blank one.
 double****** reset_table_reward(double****** table_reward)
 {
@@ -102,7 +105,7 @@ double****** reset_table_reward(double****** table_reward)
 
 
 // Effectue une boucle d'apprentissage: part de l'état initial, va jusqu'à l'état final ou s'arrête au bout d'un certain nombre d'itérations
-bool one_learning(){
+int one_learning(){
 
 	// VARIABLE :
 	double r; // Récompense
@@ -144,12 +147,12 @@ bool one_learning(){
 		{
 
 			// Choix de l'action:
-			// a = env_action_sample(); // Attendre que la fonction soit définie dans gameEnv
+			a = env_action_sample(); // Attendre que la fonction soit définie dans gameEnv
 
-			// state = env_step(a); // Attendre que la fonction soit définie dans gameEnv
+			state = game_step(a); // Attendre que la fonction soit définie dans gameEnv
 
 			// Lit la récompense
-			// r = state.reward;
+			r = state.reward;
 
 			// Actualisation des paramètres d'indices du tableau Q
 			d_u = is_a_obstacle_up();
@@ -169,6 +172,7 @@ bool one_learning(){
 			// Indentation 
 			compteur++;
 		}
+	return score; // Renvoie le score pour information
 }
 
 

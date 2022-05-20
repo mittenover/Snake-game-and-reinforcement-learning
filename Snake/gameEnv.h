@@ -75,6 +75,8 @@ void new_fruit();
 
 void init_snake();
 
+void init_new_game();
+
 struct queue* delete_last(struct queue* I);
 
 void eat_a_fruit();
@@ -96,6 +98,8 @@ int is_a_obstacle_right();
 int is_a_obstacle_left();
 
 struct envOutput game_step(action a);
+
+action env_action_sample();
 
 
 #endif

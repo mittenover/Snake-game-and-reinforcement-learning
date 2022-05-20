@@ -157,9 +157,32 @@ void init_snake(){  //Création du serpent initial qui occupe 3 cases
 	// Actualisation des tableaux
 	grid_actualize();
 	actualize_terrain();
+}
+
+
+// A utiliser uniquement après l'allocation
+void init_new_game(){
+	// On enlève un fruit si il y en a un
+	for (int i = 0; i < dim; ++i)
+	{
+		for (int j = 0; j < dim; ++j)
+		{
+			if (grid[i][j] == 'f')
+			{
+				grid[i][j] = ' ';
+			}
+		}
+	}
+
+	init_snake();
+	grid_actualize();
+	actualize_terrain();
 
 	new_fruit();
+	grid_actualize();
+	actualize_terrain();
 }
+
 
 void eat_a_fruit(){ //Cette fonction applique la transformation sur le serpent lorsqu'il mange un fruit
 
@@ -208,6 +231,8 @@ struct queue* delete_last(struct queue* I)
  
 	return I;	
 }
+
+
 
 int n_eat_a_fruit(action a){  //Cette fonction applique la transformation sur le seprent lorsqu'il avance sans manger un fruit, à priori on est obligé de prendre l'action a en argument
 	struct queue *queue_queue=malloc(sizeof(struct queue));  //Création de la queue (temporaire) qu'on va rajouter à la suite de la nouvelle tete qui prend la place du fruit
@@ -447,4 +472,10 @@ struct envOutput game_step(action a){
     //Pour chaque situation on applique des récompenses en fonction de l'environnement autour (est-ce qu'on a mangé un fruit ? est ce qu'il ya un obstacle au loin ? Est ce qu'il y a un fruit au loin ?)
 
  	//On utilise de variable locale dans 
+}
+
+
+// Choix de l'action future de façon aléatoire
+action env_action_sample(){
+	return (enum action)(rand() % number_actions);
 }

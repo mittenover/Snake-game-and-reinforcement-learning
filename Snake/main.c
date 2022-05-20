@@ -86,15 +86,29 @@ int main(int argc, char const *argv[])
 	alloc_grid();
 	alloc_grid_terrain();
 	grid_make();
-	actualize_terrain();
+	init_new_game();
+	grid_render();
+	step_forward(up);
 	grid_render();
 	init_snake();
 	grid_render();
-	test_snake();
+
+	// Tests sur les fonctions du Q learning
+	table_reward = alloc_table_reward();
+	fill_table(table_reward);
+	table_reward = reset_table_reward(table_reward);
+	// table_reward = reset_table_reward(table_reward);
+
+	// // Jouer avec le snake
+	// test_snake();
+
+	// // On recommence le jeu
+	// init_new_game();
+	// grid_render();
+	// test_snake();
 
 	
-
-	printf("Le jeu s'est arrêté correctement.\n");
+	// Suppression des alloc
 	while(queue != NULL)
 	{
 		free(queue->elem);
@@ -102,5 +116,7 @@ int main(int argc, char const *argv[])
 	}
 	free(queue);
 	free(nfruit);
+	free(table_reward);
+	printf("Le jeu s'est arrêté correctement.\n");
 	return 0;
 }
