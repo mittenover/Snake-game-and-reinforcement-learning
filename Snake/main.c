@@ -7,16 +7,22 @@
 void test_snake()
 {
 	char entree[100] = "\n";
+	is_a_fruit_ahead();
+	printf("u:%d, ",is_a_obstacle_up());
+	printf("d:%d, ",is_a_obstacle_down());
+	printf("r:%d, ",is_a_obstacle_right());
+	printf("l:%d\n",is_a_obstacle_left());
+
 	while(strcmp(entree, "q\n") != 0)
 	{
 
-		printf("Score : ");
-		taille_queue(queue);
+		printf("Score : %d\n", taille_queue(queue));
 
+		printf("Action suivante : ");
 		fgets(entree, 100, stdin);
 		if (strcmp(entree, "u\n") == 0)
 		{
-			if (!step_foward(up))
+			if (step_forward(up) == 2)
 			{
 				printf("Game over !\n");
 				break;
@@ -26,7 +32,7 @@ void test_snake()
 
 		if (strcmp(entree, "d\n") == 0)
 		{
-			if (!step_foward(down))
+			if (step_forward(down) == 2)
 			{
 				printf("Game over !\n");
 				break;
@@ -36,7 +42,7 @@ void test_snake()
 
 		if (strcmp(entree, "l\n") == 0)
 		{
-			if (!step_foward(left))
+			if (step_forward(left) == 2)
 			{
 				printf("Game over !\n");
 				break;
@@ -46,7 +52,7 @@ void test_snake()
 
 		if (strcmp(entree, "r\n") == 0)
 		{
-			if (!step_foward(right))
+			if (step_forward(right) == 2)
 			{
 				printf("Game over !\n");
 				break;
@@ -55,9 +61,9 @@ void test_snake()
 		}
 
 		is_a_fruit_ahead();
-		printf("u:%d\n",is_a_obstacle_up());
-		printf("d:%d\n",is_a_obstacle_down());
-		printf("r:%d\n",is_a_obstacle_right());
+		printf("u:%d, ",is_a_obstacle_up());
+		printf("d:%d, ",is_a_obstacle_down());
+		printf("r:%d, ",is_a_obstacle_right());
 		printf("l:%d\n",is_a_obstacle_left());
 	}
 }

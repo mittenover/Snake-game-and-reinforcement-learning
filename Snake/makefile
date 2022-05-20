@@ -1,7 +1,7 @@
 CC=gcc
 CFLAGS= #-Wall -Werror -Wfatal-errors
 SRC=./
-EXEC=main
+EXEC=clean main 
 
 all: $(EXEC)
 

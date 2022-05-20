@@ -79,11 +79,11 @@ struct queue* delete_last(struct queue* I);
 
 void eat_a_fruit();
 
-bool n_eat_a_fruit(action a);
+int n_eat_a_fruit(action a);
 
-int step_foward(action a);
+int step_forward(action a);
 
-void taille_queue(struct queue *q);
+int taille_queue(struct queue *q);
 
 int is_a_fruit_ahead();
 
@@ -94,5 +94,8 @@ int is_a_obstacle_down();
 int is_a_obstacle_right();
 
 int is_a_obstacle_left();
+
+struct envOutput game_step(action a);
+
 
 #endif

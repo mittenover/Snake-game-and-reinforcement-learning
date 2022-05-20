@@ -108,7 +108,8 @@ bool one_learning(){
 	double r; // Récompense
 	enum action a; // Action choisie
 	struct envOutput state; // Structure donnant les informations sur l'état après l'action dans l'environnement
-	
+	double max_future_s;
+
 	// Paramètre de l'algorithme de Qlearning
 	double g = 0.9;
 	alpha = 0.02;
@@ -128,11 +129,18 @@ bool one_learning(){
 	// Score
 	int score;
 
+	// Compteur d'itération
+	int compteur;
+
+	// Variable qui enregistre le resultat de step_forward
+	int step_forward_value = 1;
+
+
 
 
 	// Initialisation
 
-	while(0==0) // Définir la condition d'arrêt
+	while(compteur < 1000 && step_forward_value != 2) // Définir la condition d'arrêt
 		{
 
 			// Choix de l'action:
@@ -147,17 +155,19 @@ bool one_learning(){
 			d_u = is_a_obstacle_up();
 			d_l = is_a_obstacle_down();
 			d_l = is_a_obstacle_left();
-			d_r = is_obstacle_right();
+			d_r = is_a_obstacle_right();
 
 			f_ahead = is_a_fruit_ahead();
 
-			score = taille_queue();
+			score = taille_queue(queue);
 
-			max_futur_s = 0; // max_future_state();
+			max_future_s = 0; // max_future_state();
 
 			// Actualisation du tableau Q
 			table_reward[d_u][d_d][d_l][d_r][f_ahead][a_nb] = table_reward[d_u][d_d][d_l][d_r][f_ahead][a_nb] + alpha*(r + g*max_future_s - table_reward[d_u][d_d][d_l][d_r][f_ahead][a_nb]);
 
+			// Indentation 
+			compteur++;
 		}
 }
 

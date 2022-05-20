@@ -64,8 +64,6 @@ void grid_make(){
 			}
 		}
 	}
-
-	new_fruit();
 }
 
 // Entre le serpent dans la grille
@@ -155,6 +153,12 @@ void init_snake(){  //Création du serpent initial qui occupe 3 cases
 		grid[q->elem->queue_row][q->elem->queue_col] = '.';
 		q = q->next;
 	}
+
+	// Actualisation des tableaux
+	grid_actualize();
+	actualize_terrain();
+
+	new_fruit();
 }
 
 void eat_a_fruit(){ //Cette fonction applique la transformation sur le serpent lorsqu'il mange un fruit
@@ -205,7 +209,7 @@ struct queue* delete_last(struct queue* I)
 	return I;	
 }
 
-bool n_eat_a_fruit(action a){  //Cette fonction applique la transformation sur le seprent lorsqu'il avance sans manger un fruit, à priori on est obligé de prendre l'action a en argument
+int n_eat_a_fruit(action a){  //Cette fonction applique la transformation sur le seprent lorsqu'il avance sans manger un fruit, à priori on est obligé de prendre l'action a en argument
 	struct queue *queue_queue=malloc(sizeof(struct queue));  //Création de la queue (temporaire) qu'on va rajouter à la suite de la nouvelle tete qui prend la place du fruit
 
 	struct bout_queue *new_bout=malloc(sizeof(struct bout_queue)); //Création (permanente) des coordonnées de la nouvelle tete
@@ -215,7 +219,7 @@ bool n_eat_a_fruit(action a){  //Cette fonction applique la transformation sur l
         case up:
         	if (grid_terrain[queue->elem->queue_row-1][queue->elem->queue_col] == wall || grid_terrain[queue->elem->queue_row-1][queue->elem->queue_col] == snake)
         	{
-        		return false;
+        		return 2;
         	}
             new_bout->queue_row = queue->elem->queue_row-1;
             new_bout->queue_col = queue->elem->queue_col;
@@ -224,7 +228,7 @@ bool n_eat_a_fruit(action a){  //Cette fonction applique la transformation sur l
         case down:
         	if (grid_terrain[queue->elem->queue_row+1][queue->elem->queue_col] == wall || grid_terrain[queue->elem->queue_row+1][queue->elem->queue_col] == snake)
         	{
-        		return false;
+        		return 2;
         	}
             new_bout->queue_row = queue->elem->queue_row+1;
             new_bout->queue_col = queue->elem->queue_col;
@@ -233,7 +237,7 @@ bool n_eat_a_fruit(action a){  //Cette fonction applique la transformation sur l
         case right:
         	if (grid_terrain[queue->elem->queue_row][queue->elem->queue_col+1] == wall || grid_terrain[queue->elem->queue_row][queue->elem->queue_col+1] == snake)
         	{
-        		return false;
+        		return 2;
         	}
             new_bout->queue_row = queue->elem->queue_row;
             new_bout->queue_col = queue->elem->queue_col+1;
@@ -242,13 +246,14 @@ bool n_eat_a_fruit(action a){  //Cette fonction applique la transformation sur l
         case left:
         	if (grid_terrain[queue->elem->queue_row][queue->elem->queue_col-1] == wall || grid_terrain[queue->elem->queue_row][queue->elem->queue_col-1] == snake)
         	{
-        		return false;
+        		return 2;
         	}
             new_bout->queue_row = queue->elem->queue_row;
             new_bout->queue_col = queue->elem->queue_col-1;
         break;
 
         default:
+        	return 2; // En cas d'erreur
         break;
     }
 
@@ -265,12 +270,12 @@ bool n_eat_a_fruit(action a){  //Cette fonction applique la transformation sur l
     grid_actualize();
 
     // Tout s'est bien passé 
-    return true;    
+    return 1;    
 }
 
 
 // Avance le serpent
-int step_foward(action a)
+int step_forward(action a)
 {
 	switch (a){
         case up:
@@ -286,7 +291,7 @@ int step_foward(action a)
             if (grid[queue->elem->queue_row+1][queue->elem->queue_col] == 'f')
             {
             	eat_a_fruit(a);
-            	return true;
+            	return 0;
             }
             else {return n_eat_a_fruit(a);}
         break;
@@ -295,7 +300,7 @@ int step_foward(action a)
             if (grid[queue->elem->queue_row][queue->elem->queue_col+1] == 'f')
             {
             	eat_a_fruit(a);
-            	return true;
+            	return 0;
             }
             else {return n_eat_a_fruit(a);}
         break;
@@ -304,20 +309,20 @@ int step_foward(action a)
             if (grid[queue->elem->queue_row][queue->elem->queue_col-1] == 'f')
             {
             	eat_a_fruit(a);
-            	return true;
+            	return 0;
             }
             else {return n_eat_a_fruit(a);}
         break;
 
         default:
-        	return false;
+        	return 2;
         break;
     }
 }	
 
 
 // Vérifie la taille du serpent : correspond au score
-void taille_queue(struct queue *q)
+int taille_queue(struct queue *q)
 {
 	int n=1;
 	struct queue *p = queue;
@@ -326,8 +331,7 @@ void taille_queue(struct queue *q)
 		n++;
 		p = p->next;
 	}
-	printf("%d\n", n);
-	return;
+	return n;
 }
 
 
@@ -436,9 +440,9 @@ int is_a_obstacle_left(){
     return 0;
 }
 
-envOutput game_step(action a){
+struct envOutput game_step(action a){
    	int end=1;
-    envOutput stepOut;
+    struct envOutput stepOut;
 
     //Pour chaque situation on applique des récompenses en fonction de l'environnement autour (est-ce qu'on a mangé un fruit ? est ce qu'il ya un obstacle au loin ? Est ce qu'il y a un fruit au loin ?)
 
