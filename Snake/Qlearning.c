@@ -43,17 +43,8 @@ double****** alloc_table_reward()
 
 // Renvoie la valeur maximale du tableau Q en balayant les actions de l'état futur
 // Remarque : l'état futur correspond à l'état global, puisque celui-ci vient d'être actualisé par game_step
-double max_future_state()
+double max_future_state(int d_u, int d_d, int d_l, int d_r, int f_ahead)
 {
-	// Distances des obstacles dans chaque directions
-	int d_u;
-	int d_d;
-	int d_l;
-	int d_r;
-
-	// Présence d'un fruit et dans quelle direction
-	int f_ahead;
-
 	double max = table_reward[d_u][d_d][d_l][d_r][f_ahead][0];
 	for (int i = 1; i < 4; ++i)
 	{
@@ -107,6 +98,8 @@ double****** reset_table_reward(double****** table_reward)
 // Effectue une boucle d'apprentissage: part de l'état initial, va jusqu'à l'état final ou s'arrête au bout d'un certain nombre d'itérations
 int one_learning(){
 
+	init_new_game();
+
 	// VARIABLE :
 	double r; // Récompense
 	enum action a; // Action choisie
@@ -122,15 +115,24 @@ int one_learning(){
 	int d_d;
 	int d_l;
 	int d_r;
+	// Précédents
+	int p_d_u;
+	int p_d_d;
+	int p_d_l;
+	int p_d_r;
 
 	// Présence d'un fruit et dans quelle direction
 	int f_ahead;
+	// Précédent
+	int p_f_ahead;
 
 	// Action choisie
 	int a_nb;
 
 	// Score
 	int score;
+	// Précédent
+	int p_score;
 
 	// Compteur d'itération
 	int compteur;
@@ -138,86 +140,80 @@ int one_learning(){
 	// Variable qui enregistre le resultat de step_forward
 	int step_forward_value = 1;
 
-
-
-
 	// Initialisation
+	d_u = is_a_obstacle_up();
+	d_d = is_a_obstacle_down();
+	d_l = is_a_obstacle_left();
+	d_r = is_a_obstacle_right();
+	p_d_u = d_u;
+	p_d_d = d_d;
+	p_d_l = d_l;
+	p_d_r = d_r;
+
+	f_ahead = is_a_fruit_ahead();
+	p_f_ahead = f_ahead;
+
+	a = env_action_sample();
 
 	while(compteur < 1000 && step_forward_value != 2) // Définir la condition d'arrêt
 		{
+			state = game_step(a);
+			step_forward_value = state.step_value;
 
-			// Choix de l'action:
-			a = env_action_sample(); // Attendre que la fonction soit définie dans gameEnv
-
-			state = game_step(a); // Attendre que la fonction soit définie dans gameEnv
+			// grid_render();
 
 			// Lit la récompense
 			r = state.reward;
 
-			// Actualisation des paramètres d'indices du tableau Q
+			// Actualisation des paramètres d'indices du tableau Q (correspondant à l'état futur)
 			d_u = is_a_obstacle_up();
-			d_l = is_a_obstacle_down();
+			d_d = is_a_obstacle_down();
 			d_l = is_a_obstacle_left();
 			d_r = is_a_obstacle_right();
 
 			f_ahead = is_a_fruit_ahead();
 
-			score = taille_queue(queue);
+			score = taille_queue(queue); 
 
-			max_future_s = 0; // max_future_state();
+			max_future_s = max_future_state(d_u, d_d, d_l, d_r, f_ahead); // max_future_state();
 
 			// Actualisation du tableau Q
-			table_reward[d_u][d_d][d_l][d_r][f_ahead][a_nb] = table_reward[d_u][d_d][d_l][d_r][f_ahead][a_nb] + alpha*(r + g*max_future_s - table_reward[d_u][d_d][d_l][d_r][f_ahead][a_nb]);
+			table_reward[p_d_u][p_d_d][p_d_l][p_d_r][p_f_ahead][a] = table_reward[p_d_u][p_d_d][p_d_l][p_d_r][p_f_ahead][a] + alpha*(r + g*max_future_s - table_reward[p_d_u][p_d_d][p_d_l][p_d_r][p_f_ahead][a]);
 
 			// Indentation 
 			compteur++;
+
+			// Actualisation
+			a = env_action_sample(); // Action future
+			p_d_u = d_u;
+			p_d_d = d_d;
+			p_d_l = d_l;
+			p_d_r = d_r;
+			p_f_ahead = f_ahead;
 		}
 	return score; // Renvoie le score pour information
 }
 
-
-// Fonction d'apprentissage
-void learn(char *maze)
+action choose_max_action(int d_u, int d_d, int d_l, int d_r, int f_ahead)
 {
-	// On va apprendre progressivement, en traçant à chaque tur de boucle le trajet choisi par le tableau Q calculé
-	// En gros on reprend la structure du main mais on le boucle
+	int max = table_reward[d_u][d_d][d_l][d_r][f_ahead][up];
+	action max_action = up;
 
-	// Initialisation du jeu
-	
-    // Initialisation du tableau Q
-    table_reward = alloc_table_reward();
-    fill_table(table_reward);
-
-    // Variable d'entrée clavier
-    char entree[100] = "\n";
-
-    //Nombre d'apprentissages
-    int number_learning = 0;
-
-
-	while(strcmp(entree, "\n") == 0 || strcmp(entree, "r\n") == 0)
+	if (table_reward[d_u][d_d][d_l][d_r][f_ahead][down] > max)
 	{
-		// On fait une boucle d'apprentissage
-		one_learning();
-		number_learning++;
-
-		printf("Nombre d'apprentissages : %d\n\n", number_learning);
-
-		// On entre si on souhaite continuer
-		printf("Continuer ? ");
-		fgets(entree, 100, stdin);
-
-		// Affichage des commandes disponibles
-		if (strcmp(entree, "c\n") == 0)
-		{
-		printf("\nLes commandes disponibles sont :\n");
-		printf("- r pour reset : recommence l'apprentissage.\n");
-		printf("- q pour afficher le tableau Q du Qlearning.\n");
-		printf("- entrée pour continuer l'apprentissage.\n\n");
-
-		// On entre si on souhaite continuer
-		printf("Continuer ? ");
-		fgets(entree, 100, stdin);
-		}
+		max = table_reward[d_u][d_d][d_l][d_r][f_ahead][down];
+		max_action = down;
 	}
+	if (table_reward[d_u][d_d][d_l][d_r][f_ahead][left] > max)
+	{
+		max = table_reward[d_u][d_d][d_l][d_r][f_ahead][left];
+		max_action = left;
+	}
+	if (table_reward[d_u][d_d][d_l][d_r][f_ahead][right] > max)
+	{
+		max = table_reward[d_u][d_d][d_l][d_r][f_ahead][right];
+		max_action = right;
+	}
+
+	return max_action;
 }

@@ -39,7 +39,7 @@ typedef enum action action ;
 
 struct envOutput{
   int reward;
-  bool end;  //=0 si perdu 1 sinon
+  int step_value;  // 0 si mange un fruit, 1 si avance, 2 si le jeu est perdu
 };
 
 

@@ -68,6 +68,74 @@ void test_snake()
 	}
 }
 
+
+// Joue une partie après avoir appris un certains nombre de fois
+void play_after_learning()
+{
+	init_new_game();
+	grid_render();
+
+	char entree[100] = "\n";
+
+	action a;
+	int step_value = 1;
+	int d_u;
+	int d_d;
+	int d_l;
+	int d_r;
+	int f_ahead;
+
+	while(step_value != 2)
+	{
+		d_u = is_a_obstacle_up();
+		d_d = is_a_obstacle_down();
+		d_l = is_a_obstacle_left();
+		d_r = is_a_obstacle_right();
+		f_ahead = is_a_fruit_ahead();
+
+		a = choose_max_action(d_u, d_d, d_l, d_r, f_ahead);
+		printf("Action choosen %d\n", a);
+		step_value = step_forward(a);
+
+		grid_render();
+
+		printf("Mouvement suivant");
+		fgets(entree, 100, stdin);
+	}
+
+}
+
+
+void learning(){
+	char entree[100] = "\n";
+	int nb_apprentissages = 0;
+
+	// Initaialisation
+	table_reward = alloc_table_reward();
+	fill_table(table_reward);
+
+	while(strcmp(entree, "q\n") != 0)
+	{	
+		for (int i = 0; i < 1000; ++i)
+		{
+			one_learning();
+			nb_apprentissages++;
+		}
+		printf("Nombres d'apprentissages : %d\n", nb_apprentissages);
+
+		grid_render();
+
+		printf("Continuer à apprendre ?\n");
+		fgets(entree, 100, stdin);
+
+		if (strcmp(entree, "p\n") == 0)
+		{
+			play_after_learning();
+		}
+	}
+}
+
+
 int main(int argc, char const *argv[])
 {
 	if (argc != 1)
@@ -88,25 +156,12 @@ int main(int argc, char const *argv[])
 	grid_make();
 	init_new_game();
 	grid_render();
-	step_forward(up);
-	grid_render();
-	init_snake();
-	grid_render();
 
-	// Tests sur les fonctions du Q learning
-	table_reward = alloc_table_reward();
-	fill_table(table_reward);
-	table_reward = reset_table_reward(table_reward);
-	// table_reward = reset_table_reward(table_reward);
+	// Tests sur les fonctions du Q learnings
+	learning();
 
 	// // Jouer avec le snake
 	// test_snake();
-
-	// // On recommence le jeu
-	// init_new_game();
-	// grid_render();
-	// test_snake();
-
 	
 	// Suppression des alloc
 	while(queue != NULL)

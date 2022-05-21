@@ -370,7 +370,7 @@ int is_a_fruit_ahead(){
     {
      	if (grid_terrain[i][state_col] == fruit)
           	{
-          		printf("The fruit is UP\n");
+          		// printf("The fruit is UP\n");
          		return 1;
           	}
     }
@@ -380,7 +380,7 @@ int is_a_fruit_ahead(){
     {
        	if (grid_terrain[i][state_col] == fruit)
        	{
-       		printf("The fruit is DOWN\n");
+       		// printf("The fruit is DOWN\n");
       		return 2;
       	}
     }
@@ -390,7 +390,7 @@ int is_a_fruit_ahead(){
     {
            	if (grid_terrain[state_row][i] == fruit)
            	{
-           		printf("The fruit is LEFT\n");
+           		// printf("The fruit is LEFT\n");
            		return 3;
            	}
     }
@@ -400,12 +400,12 @@ int is_a_fruit_ahead(){
     {
            	if (grid_terrain[state_row][i] == fruit)
            	{
-           		printf("The fruit is RIGHT\n");
+           		// printf("The fruit is RIGHT\n");
            		return 4;
            	}
     }
 
-    printf("There is no fruit ahead\n");
+    // printf("There is no fruit ahead\n");
     return 0;
 }
 
@@ -469,9 +469,30 @@ struct envOutput game_step(action a){
    	int end=1;
     struct envOutput stepOut;
 
-    //Pour chaque situation on applique des récompenses en fonction de l'environnement autour (est-ce qu'on a mangé un fruit ? est ce qu'il ya un obstacle au loin ? Est ce qu'il y a un fruit au loin ?)
+    stepOut.step_value = step_forward(a);
 
- 	//On utilise de variable locale dans 
+    // Si il mange un fruit
+    if (stepOut.step_value == 0)
+    {
+    	stepOut.reward = 0.5;
+    }
+    // Si il ne fiait qu'avancer
+    else if (stepOut.step_value == 1)
+    {
+    	stepOut.reward = 0;
+    }
+    else {
+    	stepOut.reward = -0.1;
+    }
+
+    // A une récompense si il avance vers un fruit
+    if (is_a_fruit_ahead() == a + 1)
+    {
+    	stepOut.reward = 0.1;
+    }
+
+    return stepOut;
+    
 }
 
 
