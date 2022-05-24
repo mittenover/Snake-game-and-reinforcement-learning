@@ -19,6 +19,7 @@ int state_row;
 int state_col;
 int goal_row;
 int goal_col;
+int window;
 
 enum terrain{
     wall,

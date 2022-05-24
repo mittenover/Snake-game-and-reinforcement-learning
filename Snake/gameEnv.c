@@ -1,5 +1,6 @@
 #include "gameEnv.h" 
 #include "Qlearning.h"
+#include "functions.h"
 
 
 
@@ -246,8 +247,10 @@ int n_eat_a_fruit(action a){  //Cette fonction applique la transformation sur le
         	{
         		return 2;
         	}
-            new_bout->queue_row = queue->elem->queue_row-1;
-            new_bout->queue_col = queue->elem->queue_col;
+        	else{
+        		new_bout->queue_row = queue->elem->queue_row-1;
+            	new_bout->queue_col = queue->elem->queue_col;
+        	}
         break;
 
         case down:
@@ -255,8 +258,10 @@ int n_eat_a_fruit(action a){  //Cette fonction applique la transformation sur le
         	{
         		return 2;
         	}
-            new_bout->queue_row = queue->elem->queue_row+1;
-            new_bout->queue_col = queue->elem->queue_col;
+        	else {
+        		new_bout->queue_row = queue->elem->queue_row+1;
+           		new_bout->queue_col = queue->elem->queue_col;
+        	}
         break;
 
         case right:
@@ -264,8 +269,10 @@ int n_eat_a_fruit(action a){  //Cette fonction applique la transformation sur le
         	{
         		return 2;
         	}
-            new_bout->queue_row = queue->elem->queue_row;
-            new_bout->queue_col = queue->elem->queue_col+1;
+  			else {
+  				new_bout->queue_row = queue->elem->queue_row;
+            	new_bout->queue_col = queue->elem->queue_col+1;
+  			}
         break;
 
         case left:
@@ -273,8 +280,10 @@ int n_eat_a_fruit(action a){  //Cette fonction applique la transformation sur le
         	{
         		return 2;
         	}
-            new_bout->queue_row = queue->elem->queue_row;
-            new_bout->queue_col = queue->elem->queue_col-1;
+            else {
+            	new_bout->queue_row = queue->elem->queue_row;
+            	new_bout->queue_col = queue->elem->queue_col-1;
+            }
         break;
 
         default:
@@ -414,7 +423,7 @@ int is_a_obstacle_up(){
 	// Pour l'instant regarde sur le tableau grid_terrain
 
 	// UP
-	for (int i = state_row-1; i >=0; --i)
+	for (int i = state_row-1; i >= max(state_row-1 - window, 0); --i)
     {
      	if ((grid_terrain[i][state_col] == wall)||(grid_terrain[i][state_col] == snake))
           	{
@@ -423,29 +432,29 @@ int is_a_obstacle_up(){
     }
 
    
-    return 0;
+    return window;
 }
 
 int is_a_obstacle_down(){
-	for (int i = state_row+1; i < dim; ++i)
+	for (int i = state_row+1; i < min(state_row+1 + window, dim); ++i)
     {
        	if ((grid_terrain[i][state_col] == wall)||(grid_terrain[i][state_col] == snake))
        	{
        		return(i-state_row-1);
       	}
     }
-    return 0;
+    return window;
 }
 
 int is_a_obstacle_right(){
-	for (int i = state_col+1; i < dim; i++)
+	for (int i = state_col+1; i < min(state_col+1 + window, dim); i++)
     {
            	if ((grid_terrain[state_row][i] == wall)||(grid_terrain[state_row][i] == snake))
            	{
            		return(i-state_col-1);
            	}
     }
-return 0;
+	return window;
 }
 
 int is_a_obstacle_left(){
@@ -453,16 +462,14 @@ int is_a_obstacle_left(){
 	// Pour l'instant regarde sur le tableau grid_terrain
 
 	// UP
-	for (int i = state_col-1; i >=0; --i)
+	for (int i = state_col-1; i >=max(state_col-1 - window, 0); --i)
     {
      	if ((grid_terrain[state_row][i] == wall)||(grid_terrain[state_row][i] == snake))
           	{
          		return state_col-i-1;
           	}
     }
-
-   
-    return 0;
+    return window;
 }
 
 struct envOutput game_step(action a){
@@ -474,21 +481,28 @@ struct envOutput game_step(action a){
     // Si il mange un fruit
     if (stepOut.step_value == 0)
     {
-    	stepOut.reward = 0.5;
+    	stepOut.reward = 100;
     }
-    // Si il ne fiait qu'avancer
+    // Si il ne fait qu'avancer
     else if (stepOut.step_value == 1)
     {
     	stepOut.reward = 0;
     }
     else {
-    	stepOut.reward = -0.1;
+    	stepOut.reward = -1;
     }
 
     // A une récompense si il avance vers un fruit
     if (is_a_fruit_ahead() == a + 1)
     {
-    	stepOut.reward = 0.1;
+    	// printf("YO\n");
+    	stepOut.reward = stepOut.reward + 100;
+    }
+
+    // S'il avance vers le fruit mais qu'un mur se trouve juste devant lui, il doit l'éviter pour ne pas perdre
+    if (stepOut.step_value == 2 && is_a_fruit_ahead() == a+1)
+    {
+    	stepOut.reward = -10;
     }
 
     return stepOut;

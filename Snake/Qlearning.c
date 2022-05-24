@@ -4,12 +4,12 @@
 
 #include "Qlearning.h"
 #include "gameEnv.h"
+#include "functions.h"
 
 // Remarque: on prend la valeur 15 parce qu'on part du principe que la taille du jeu est (17x17)
 
 double****** alloc_table_reward()
 {
-	// On est obligé de créer 5 boucle pour créer un tableau de flottant à 5 dimensions
 	double****** table_reward = malloc(sizeof(double*****)*15);
 
 	for (int i = 0; i < 15; ++i)
@@ -108,7 +108,7 @@ int one_learning(){
 
 	// Paramètre de l'algorithme de Qlearning
 	double g = 0.9;
-	alpha = 0.02;
+	alpha = 0.1;
 
 	// Distances des obstacles dans chaque directions
 	int d_u;
@@ -135,7 +135,7 @@ int one_learning(){
 	int p_score;
 
 	// Compteur d'itération
-	int compteur;
+	int compteur = 0;
 
 	// Variable qui enregistre le resultat de step_forward
 	int step_forward_value = 1;
@@ -154,8 +154,9 @@ int one_learning(){
 	p_f_ahead = f_ahead;
 
 	a = env_action_sample();
+	a_nb = a;
 
-	while(compteur < 1000 && step_forward_value != 2) // Définir la condition d'arrêt
+	while(compteur < 1000) // Définir la condition d'arrêt
 		{
 			state = game_step(a);
 			step_forward_value = state.step_value;
@@ -178,13 +179,14 @@ int one_learning(){
 			max_future_s = max_future_state(d_u, d_d, d_l, d_r, f_ahead); // max_future_state();
 
 			// Actualisation du tableau Q
-			table_reward[p_d_u][p_d_d][p_d_l][p_d_r][p_f_ahead][a] = table_reward[p_d_u][p_d_d][p_d_l][p_d_r][p_f_ahead][a] + alpha*(r + g*max_future_s - table_reward[p_d_u][p_d_d][p_d_l][p_d_r][p_f_ahead][a]);
+			table_reward[p_d_u][p_d_d][p_d_l][p_d_r][p_f_ahead][a_nb] = table_reward[p_d_u][p_d_d][p_d_l][p_d_r][p_f_ahead][a_nb] + alpha*(r + g*max_future_s - table_reward[p_d_u][p_d_d][p_d_l][p_d_r][p_f_ahead][a_nb]);
 
 			// Indentation 
 			compteur++;
 
 			// Actualisation
 			a = env_action_sample(); // Action future
+			a_nb = a;
 			p_d_u = d_u;
 			p_d_d = d_d;
 			p_d_l = d_l;
