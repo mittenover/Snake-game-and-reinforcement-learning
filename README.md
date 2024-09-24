@@ -1,6 +1,6 @@
 # Snake Game and Reinforcement Learning
 
-The aim of this project was to solve a **Snake game** using **reinforcement learning**.
+The aim of this project was to solve a **Snake game** using **reinforcement learning** in the context of *IN104 : Introduction to carrying out an IT project* first year course at ENSTA Paris.
 
 The project was divided into two main parts:
 
